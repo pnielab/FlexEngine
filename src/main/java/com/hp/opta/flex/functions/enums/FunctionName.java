@@ -5,9 +5,9 @@ package com.hp.opta.flex.functions.enums;
  */
 public enum FunctionName {
 
-
     Concatenate("__concatenate"),
-    IfAorBThenElse("__ifAorBThenElse");
+    IfAorBThenElse("__ifAorBThenElse"),
+    IfGreaterOrEqual("__ifGreaterOrEqual");
 
 
     private String name;

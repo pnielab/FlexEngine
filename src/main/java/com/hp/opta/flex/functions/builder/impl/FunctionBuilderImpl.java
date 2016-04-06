@@ -2,6 +2,7 @@ package com.hp.opta.flex.functions.builder.impl;
 
 import com.hp.opta.flex.functions.Concatenate;
 import com.hp.opta.flex.functions.IfAorBThenElse;
+import com.hp.opta.flex.functions.IfGreaterOrEqual;
 import com.hp.opta.flex.functions.builder.FunctionBuilder;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class FunctionBuilderImpl implements FunctionBuilder {
         Map<String, Function<List<Object>, Object>> functions = new HashMap<String, Function<List<Object>, Object>>();
         functions.put(Concatenate.FUNCTION_NAME.getFunctionName(), new Concatenate());
         functions.put(IfAorBThenElse.FUNCTION_NAME.getFunctionName(), new IfAorBThenElse());
+        functions.put(IfGreaterOrEqual.FUNCTION_NAME.getFunctionName(), new IfGreaterOrEqual());
         return functions;
     }
 }
