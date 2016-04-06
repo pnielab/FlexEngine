@@ -7,7 +7,8 @@ public enum FunctionName {
 
     Concatenate("__concatenate"),
     IfAorBThenElse("__ifAorBThenElse"),
-    IfGreaterOrEqual("__ifGreaterOrEqual");
+    IfGreaterOrEqual("__ifGreaterOrEqual"),
+    IfThenElse("__ifThenElse");
 
 
     private String name;

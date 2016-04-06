@@ -3,6 +3,7 @@ package com.hp.opta.flex.functions.builder.impl;
 import com.hp.opta.flex.functions.Concatenate;
 import com.hp.opta.flex.functions.IfAorBThenElse;
 import com.hp.opta.flex.functions.IfGreaterOrEqual;
+import com.hp.opta.flex.functions.IfThenElse;
 import com.hp.opta.flex.functions.builder.FunctionBuilder;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class FunctionBuilderImpl implements FunctionBuilder {
         functions.put(Concatenate.FUNCTION_NAME.getFunctionName(), new Concatenate());
         functions.put(IfAorBThenElse.FUNCTION_NAME.getFunctionName(), new IfAorBThenElse());
         functions.put(IfGreaterOrEqual.FUNCTION_NAME.getFunctionName(), new IfGreaterOrEqual());
+        functions.put(IfThenElse.FUNCTION_NAME.getFunctionName(), new IfThenElse());
         return functions;
     }
 }
