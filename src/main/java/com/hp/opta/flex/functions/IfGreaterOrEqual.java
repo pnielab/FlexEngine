@@ -1,5 +1,6 @@
 package com.hp.opta.flex.functions;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -14,11 +15,11 @@ import java.util.function.Function;
  * parameter is returned. Otherwise, the
  * fourth parameter is returned.
  */
-public class IfGreaterOrEqual implements Function<Object, Object> {
+public class IfGreaterOrEqual implements Function<List<Object>, Object> {
 
 
     @Override
-    public Object apply(Object o) {
+    public Object apply(List<Object> o) {
         return null;
     }
 }

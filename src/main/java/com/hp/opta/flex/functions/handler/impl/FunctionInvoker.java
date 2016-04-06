@@ -4,6 +4,7 @@ import com.hp.opta.flex.functions.builder.impl.FunctionBuilderImpl;
 import com.hp.opta.flex.functions.handler.Handler;
 import org.slf4j.Logger;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -12,7 +13,7 @@ import java.util.function.Function;
  */
 public class FunctionInvoker implements Handler {
 
-    private static final Map<String, Function<Object, Object>> functions;
+    private static final Map<String, Function<List<Object>, Object>> functions;
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(FunctionInvoker.class);
 
     static {
@@ -20,8 +21,8 @@ public class FunctionInvoker implements Handler {
     }
 
     @Override
-    public Object handle(String functionName, Object params) {
-        Function<Object, Object> function = functions.get(functionName);
+    public Object handle(String functionName, List<Object> params) {
+        Function<List<Object>, Object> function = functions.get(functionName);
         if (function == null) {
             logger.warn("function: {}, is not supported", functionName);
             return null;

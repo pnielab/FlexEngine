@@ -3,6 +3,7 @@ package com.hp.opta.flex.functions;
 import com.hp.opta.flex.functions.enums.FunctionName;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.function.Function;
 
 
@@ -20,24 +21,20 @@ import java.util.function.Function;
  *
  * @return String
  */
-public class Concatenate implements Function<Object, Object> {
+public class Concatenate implements Function<List<Object>, Object> {
 
     public static final FunctionName FUNCTION_NAME = FunctionName.Concatenate;
 
 
-
-
-
     @Override
-    public Object apply(Object objectArray) {
-        Object[] objects = (Object[]) objectArray;
-        // objects.length == 0 should fail in validation
+    public Object apply(List<Object> objects) {
+        // objects.size == 0 should fail in validation
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < objects.length; i++) {
-            if (objects[i] != null) {
-                sb.append(String.valueOf(objects[i]));
+        objects.stream().forEach(object -> {
+            if (object != null) {
+                sb.append(toString().valueOf(object));
             }
-        }
+        });
         return StringUtils.isEmpty(sb.toString()) ? null : sb.toString();
     }
 }

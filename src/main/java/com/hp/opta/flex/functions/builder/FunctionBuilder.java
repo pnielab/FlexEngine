@@ -1,5 +1,6 @@
 package com.hp.opta.flex.functions.builder;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -8,6 +9,6 @@ import java.util.function.Function;
  */
 public interface FunctionBuilder {
 
-    public Map<String, Function<Object, Object>> prepare();
+    public Map<String, Function<List<Object>, Object>> prepare();
 
 }
