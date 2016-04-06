@@ -21,8 +21,8 @@ import java.util.function.Function;
  */
 public class IfGreaterOrEqual implements Function<List<Object>, Object> {
 
-    private static final Logger logger = LoggerFactory.getLogger(IfGreaterOrEqual.class);
     public static final FunctionName FUNCTION_NAME = FunctionName.IfGreaterOrEqual;
+    private static final Logger logger = LoggerFactory.getLogger(IfGreaterOrEqual.class);
 
     @Override
     public Object apply(List<Object> objects) {
@@ -32,17 +32,23 @@ public class IfGreaterOrEqual implements Function<List<Object>, Object> {
             return null;
         }
         Integer firstParameter = parse(objects.get(0));
-        Integer secondParameter = (Integer) objects.get(1);
+        Integer secondParameter = parse(objects.get(1));
         return firstParameter.compareTo(secondParameter) > 0 ? objects.get(2) : objects.get(3);
     }
 
     private Integer parse(Object value) {
         Integer result = 0;
         try {
-            if (value instanceof String) {
+            if (value instanceof Integer) {
+                result = (Integer) value;
+            } else if (value instanceof String) {
                 result = Integer.valueOf((String) value);
+            } else if (value instanceof Double) {
+                result = ((Double) value).intValue();
+            } else if (value instanceof Long) {
+                result = ((Long) value).intValue();
             }
-            result = (Integer) value;
+
         } catch (Exception e) {
             logger.error("unable to parse integer from: {}, returning 0 instead", value);
         }
