@@ -3,6 +3,7 @@ package com.hp.opta.flex.functions;
 import com.hp.opta.flex.functions.enums.FunctionName;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -15,19 +16,18 @@ import java.util.function.Function;
  * parameter is returned. Otherwise, the
  * fifth parameter is returned.
  */
-public class IfAorBThenElse implements Function<Object, Object> {
+public class IfAorBThenElse implements Function<List<Object>, Object> {
 
     public static final FunctionName FUNCTION_NAME = FunctionName.IfAorBThenElse;
 
     @Override
-    public Object apply(Object objectArray) {
+    public Object apply(List<Object> objects) {
 
-        String[] values = (String[]) objectArray;
-        String compareWith = values[0];
-        String parameterA = values[1];
-        String ParameterB = values[2];
-        String whenTrue = values[3];
-        String whenFalse = values[4];
+        String compareWith = String.valueOf(objects.get(0));
+        String parameterA = String.valueOf(objects.get(1));
+        String ParameterB = String.valueOf(objects.get(2));
+        String whenTrue = String.valueOf(objects.get(3));
+        String whenFalse = String.valueOf(objects.get(4));
         if (!StringUtils.isEmpty(compareWith)) {
             return (compareWith.equals(parameterA) || compareWith.equals(ParameterB)) ? whenTrue : whenFalse;
         }
