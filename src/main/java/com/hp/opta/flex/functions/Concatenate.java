@@ -1,5 +1,6 @@
 package com.hp.opta.flex.functions;
 
+import com.hp.opta.flex.functions.enums.FunctionName;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.function.Function;
@@ -21,7 +22,11 @@ import java.util.function.Function;
  */
 public class Concatenate implements Function<Object, Object> {
 
-    public static final String FUNCTION_NAME = "__concatenate";
+    public static final FunctionName FUNCTION_NAME = FunctionName.Concatenate;
+
+
+
+
 
     @Override
     public Object apply(Object objectArray) {

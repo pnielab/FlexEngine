@@ -16,8 +16,8 @@ public class FunctionBuilderImpl implements FunctionBuilder {
     @Override
     public Map<String, Function<Object, Object>> prepare() {
         Map<String, Function<Object, Object>> functions = new HashMap<String, Function<Object, Object>>();
-        functions.put(Concatenate.FUNCTION_NAME, new Concatenate());
-        functions.put(IfAorBThenElse.FUNCTION_NAME, new IfAorBThenElse());
+        functions.put(Concatenate.FUNCTION_NAME.getFunctionName(), new Concatenate());
+        functions.put(IfAorBThenElse.FUNCTION_NAME.getFunctionName(), new IfAorBThenElse());
         return functions;
     }
 }
