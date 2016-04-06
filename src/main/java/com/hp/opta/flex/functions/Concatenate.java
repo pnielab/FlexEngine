@@ -25,7 +25,6 @@ public class Concatenate implements Function<List<Object>, Object> {
 
     public static final FunctionName FUNCTION_NAME = FunctionName.Concatenate;
 
-
     @Override
     public Object apply(List<Object> objects) {
         // objects.size == 0 should fail in validation
