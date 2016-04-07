@@ -23,7 +23,7 @@ public class IfAorBThenElseTest {
     }
 
     @Test
-    public void test() {
+    public void basicTest() {
 
         List<Object> objectArray = new ArrayList<Object>();
         objectArray.add("test1");
