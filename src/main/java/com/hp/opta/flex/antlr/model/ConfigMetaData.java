@@ -11,7 +11,7 @@ public class ConfigMetaData {
 
     private String regex;
     private int tokenCount;
-    private List<FlexToken> tokens = new ArrayList<FlexToken>();
+    private List<FlexToken> tokens;
 
 
     public String getRegex() {
