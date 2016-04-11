@@ -4,3 +4,4 @@ target/
 /.classpath
 /.project
 FlexEngine.iml
+/FlexEngineFunctions.iml
