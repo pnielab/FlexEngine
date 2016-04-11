@@ -5,7 +5,13 @@ grammar FlexGrammar;
 import com.hp.opta.flex.antlr.parser.impl.ParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+<<<<<<< HEAD:src/main/antlr4/com/hp/opta/flex/antlr/parser/FlexGrammar.g4
 import com.hp.opta.flex.antlr.model.*;
+=======
+
+import com.hp.opta.flex.configuration.model.*;
+
+>>>>>>> Added Metamodel:src/main/antlr4/FlexGrammar.g4
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.String;
@@ -17,7 +23,7 @@ import java.lang.Integer;
 
   public static final int WHITESPACE = 2;
 
-  private List<FlexToken> finalLdbExpression = null;
+  private List<TokenMetaData> finalLdbExpression = null;
 
   private ConfigMetaData configMetaData = new ConfigMetaData();
 
@@ -37,7 +43,11 @@ import java.lang.Integer;
  * Start Symbols
  */
 
+<<<<<<< HEAD:src/main/antlr4/com/hp/opta/flex/antlr/parser/FlexGrammar.g4
 /*parseLdb returns [List<FlexToken> ldbResponce]
+=======
+parseLdb returns [List<TokenMetaData> ldbResponce]
+>>>>>>> Added Metamodel:src/main/antlr4/FlexGrammar.g4
     @Init {
       $ldbResponce = finalLdbExpression;
     }:
@@ -113,26 +123,26 @@ ldbExpression:
 ;
 
 
-predicate returns [List<FlexToken> tokenObj] :
-    tokensList {$tokenObj=$tokensList.flexTokens;}
+predicate returns [List<TokenMetaData> tokenObj] :
+    tokensList {$tokenObj=$tokensList.TokenMetaDatas;}
 //    token {$tokenObj=$token.tokenObj;}
 ;
 
 
-token returns [FlexToken tokenObj] :
+token returns [TokenMetaData tokenObj] :
 //  token[3].name=MessageTime
 //  token[3].type=TimeStamp
 //  token[3].format=yyyy-MM-dd HH\:mm\:ss.sss
     'token[' index1=NUMBER '].name=' name=ID
-    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = FlexToken.create($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
-    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = FlexToken.create($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
+    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
+    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
 ;
 
-tokensList returns [List<FlexToken> flexTokens]
+tokensList returns [List<TokenMetaData> TokenMetaDatas]
   @init {
-      $flexTokens = new ArrayList<>();
+      $TokenMetaDatas = new ArrayList<>();
   }:
-  a=token {$flexTokens.add($a.tokenObj); } ( b=token {$flexTokens.add($b.tokenObj);})*
+  a=token {$TokenMetaDatas.add($a.tokenObj); } ( b=token {$TokenMetaDatas.add($b.tokenObj);})*
 ;
 
 //rexCommand returns [LdbExpression expression] :
