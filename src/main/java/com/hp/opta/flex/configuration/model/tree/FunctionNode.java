@@ -98,22 +98,4 @@ public class FunctionNode<T> implements Node<Object> {
 		this.parameters.add(parameter);
 	}
 	
-	
-	/**
-	 * Removes the parameters.
-	 *
-	 * @param parameter the parameter
-	 */
-	public void removeParameters(Node<T> parameter) {
-		if(this.parameters == null){
-			this.parameters = new LinkedList<>();
-		}
-		this.parameters.remove(parameter);
-	}
-	
-	
-	
-	
-	
-
 }
