@@ -1,5 +1,7 @@
 package com.hp.opta.flex.configuration.model;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,14 @@ public class ConfigurationMetaData {
     /** The Constant comparator. */
     private static final TokenMetaDataIndexComparator comparator = new TokenMetaDataIndexComparator();
     
+    
+    /**
+     * Instantiates a new configuration meta data.
+     */
+    public ConfigurationMetaData() {
+    	tokens = new LinkedList<>();
+    	eventMappings = new HashMap<>();
+	}
     
     
 	/**
@@ -61,6 +71,29 @@ public class ConfigurationMetaData {
 		this.tokens = tokens;;
 		this.tokens.sort(comparator);
 	}
+	
+	
+	/**
+	 * Adds a token.
+	 *
+	 * @param token the token
+	 */
+	public void addToken(TokenMetaData token){
+		this.tokens.add(token);
+		this.tokens.sort(comparator);
+	}
+	
+	
+	
+	/**
+	 * Removes the token.
+	 *
+	 * @param token the token
+	 */
+	public void removeToken(TokenMetaData token){
+		this.tokens.remove(token);
+	}
+	
 
 	/**
 	 * Gets the event mappings.
@@ -79,6 +112,28 @@ public class ConfigurationMetaData {
 	public void setEventMappings(Map<String, Node<? extends Object>> eventMappings) {
 		this.eventMappings = eventMappings;
 	}
+	
+	
+	/**
+	 * Adds the event mappings.
+	 *
+	 * @param key the key
+	 * @param node the node
+	 */
+	public void addEventMapping(String key, Node<? extends Object> node) {
+		this.eventMappings.put(key, node);
+	}
+	
+	 
+	/**
+	 * Removes the event mapping.
+	 *
+	 * @param key the key
+	 */
+	public void removeEventMapping(String key) {
+		this.eventMappings.remove(key);
+	}
+		
     
   
     

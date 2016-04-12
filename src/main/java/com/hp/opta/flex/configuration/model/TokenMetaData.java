@@ -1,5 +1,7 @@
 package com.hp.opta.flex.configuration.model;
 
+import java.util.Objects;
+
 /**
  * The Class TokenMetaData.
  */
@@ -31,10 +33,10 @@ public class TokenMetaData {
 	/**
 	 * Instantiates a new token meta data.
 	 *
-	 * @param index the index
 	 * @param name the name
 	 * @param type the type
 	 * @param format the format
+	 * @param index the index
 	 */
 	public TokenMetaData(String name, TokenType type, String format, int index) {
 		this.name = name;
@@ -114,5 +116,44 @@ public class TokenMetaData {
 	public void setFormat(String format) {
 		this.format = format;
 	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((format == null) ? 0 : format.hashCode());
+		result = prime * result + index;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TokenMetaData other = (TokenMetaData) obj;
+		
+		return ((this.index == other.index) && 
+				(this.type == other.type) &&
+				Objects.equals(this.format, other.format) && 
+				Objects.equals(this.name, other.name));
+	}
+	
+	
+	
+	
     
 }
