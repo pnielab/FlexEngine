@@ -54,11 +54,12 @@ parseConfigFile returns [ConfigMetaData parseResponse]
 
 configMetaDataExpression :
  regex = regexExpression  {configMetaData.setRegex($regex.expression);}
-|tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
-|tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
+ tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
+ tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
 /*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}
  | tokenExpression         {$expression = $tokenExpression.expression; parseResponse.setTokens($expression);}*/
 ;
+
 
 regexExpression returns [String expression] :
  'regex=' regex=ID
