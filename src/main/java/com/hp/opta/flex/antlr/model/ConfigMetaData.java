@@ -2,6 +2,7 @@ package com.hp.opta.flex.antlr.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by zeev on 4/10/16.
@@ -9,17 +10,17 @@ import java.util.List;
 public class ConfigMetaData {
 
 
-    private String regex;
+    private Pattern regex;
     private int tokenCount;
     private List<FlexToken> tokens;
 
 
-    public String getRegex() {
+    public Pattern getRegex() {
         return regex;
     }
 
     public void setRegex(String regex) {
-        this.regex = regex;
+        this.regex = Pattern.compile(regex);
     }
 
     public int getTokenCount() {

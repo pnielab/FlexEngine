@@ -2,26 +2,24 @@ grammar FlexGrammar;
 
 
 @header {
+import com.hp.opta.flex.antlr.parser.impl.ParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.hp.opta.flex.antlr.model.*;
-
-/*import com.hp.opsa.ldb.parser.*;
-import com.hp.opsa.ldb.error.*;
-import com.hp.opsa.ldb.model.*;
-import com.hp.opsa.ldb.*;
-import com.hp.opsa.flex.*;*/
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.String;
+import java.lang.Integer;
 }
 
 @members {
-  //private static final Logger LOG = LoggerFactory.getLogger(LdbParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ParserImpl.class);
 
   public static final int WHITESPACE = 2;
 
   private List<FlexToken> finalLdbExpression = null;
+
+  private ConfigMetaData configMetaData = new ConfigMetaData();
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -39,11 +37,37 @@ import java.util.List;
  * Start Symbols
  */
 
-parseLdb returns [List<FlexToken> ldbResponce]
+/*parseLdb returns [List<FlexToken> ldbResponce]
     @Init {
       $ldbResponce = finalLdbExpression;
     }:
    (ldbExpression) EOF { $ldbResponce = finalLdbExpression; }
+;*/
+
+parseConfigFile returns [ConfigMetaData parseResponse]
+    @Init {
+      $parseResponse = configMetaData;
+    }:
+   (configMetaDataExpression) EOF { $parseResponse = configMetaData; }
+;
+
+
+configMetaDataExpression :
+ regex = regexExpression  {configMetaData.setRegex($regex.expression);}
+|tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
+|tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
+/*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}
+ | tokenExpression         {$expression = $tokenExpression.expression; parseResponse.setTokens($expression);}*/
+;
+
+regexExpression returns [String expression] :
+ 'regex=' regex=ID
+ {$expression = $regex.text;}
+;
+
+tokenCountExpression returns [Integer expression] :
+ 'token.count=' count=NUMBER
+ {$expression = Integer.parseInt($count.text);}
 ;
 
 /**
@@ -65,6 +89,7 @@ ASTERISK        : '*';
 LEFT_BRACKET    : '[';
 RIGHT_BRACKET   : ']';
 HYPHEN          : '-';
+
 
 WS              : [ \r\t\n]+ -> channel(WHITESPACE);
 NUMBER          : ('0'..'9')+ '.' ('0'..'9')+  | ('0'..'9')+;
