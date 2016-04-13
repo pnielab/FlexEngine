@@ -2,21 +2,24 @@ grammar FlexGrammar;
 
 
 @header {
+import com.hp.opta.flex.antlr.parser.impl.ParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.hp.opta.flex.configuration.model.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.String;
+import java.lang.Integer;
 }
 
 @members {
-  //private static final Logger LOG = LoggerFactory.getLogger(LdbParser.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ParserImpl.class);
 
   public static final int WHITESPACE = 2;
 
   private List<TokenMetaData> finalLdbExpression = null;
+
+  private ConfigurationMetaData ConfigurationMetaData = new ConfigurationMetaData();
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -34,11 +37,37 @@ import java.util.List;
  * Start Symbols
  */
 
-parseLdb returns [List<TokenMetaData> ldbResponce]
+/*parseLdb returns [List<TokenMetaData> ldbResponce]
     @Init {
       $ldbResponce = finalLdbExpression;
     }:
    (ldbExpression) EOF { $ldbResponce = finalLdbExpression; }
+;*/
+
+parseConfigFile returns [ConfigurationMetaData parseResponse]
+    @Init {
+      $parseResponse = ConfigurationMetaData;
+    }:
+   (ConfigurationMetaDataExpression) EOF { $parseResponse = ConfigurationMetaData; }
+;
+
+
+ConfigurationMetaDataExpression :
+ regex = regexExpression  {ConfigurationMetaData.setRegex($regex.expression);}
+|tokens= predicate {ConfigurationMetaData.setTokens($tokens.tokenObj);}
+|tokenCount = tokenCountExpression {ConfigurationMetaData.setTokenCount($tokenCount.expression);}
+/*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}
+ | tokenExpression         {$expression = $tokenExpression.expression; parseResponse.setTokens($expression);}*/
+;
+
+regexExpression returns [String expression] :
+ 'regex=' regex=ID
+ {$expression = $regex.text;}
+;
+
+tokenCountExpression returns [Integer expression] :
+ 'token.count=' count=NUMBER
+ {$expression = Integer.parseInt($count.text);}
 ;
 
 /**
@@ -60,6 +89,7 @@ ASTERISK        : '*';
 LEFT_BRACKET    : '[';
 RIGHT_BRACKET   : ']';
 HYPHEN          : '-';
+
 
 WS              : [ \r\t\n]+ -> channel(WHITESPACE);
 NUMBER          : ('0'..'9')+ '.' ('0'..'9')+  | ('0'..'9')+;
@@ -94,8 +124,8 @@ token returns [TokenMetaData tokenObj] :
 //  token[3].type=TimeStamp
 //  token[3].format=yyyy-MM-dd HH\:mm\:ss.sss
     'token[' index1=NUMBER '].name=' name=ID
-    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
-    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
+    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = TokenMetaData.create($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
+    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = TokenMetaData.create($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
 ;
 
 tokensList returns [List<TokenMetaData> TokenMetaDatas]
