@@ -53,7 +53,7 @@ parseConfigFile returns [ConfigMetaData parseResponse]
 
 
 configMetaDataExpression :
- regex = regexExpression  {configMetaData.setRegex($regex.expression);}
+ regex = regexExpression  {configMetaData.setParseString($regex.expression);configMetaData.setParsingMethod(ParsingMethod.REGEX);}
  tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
  tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
 /*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}

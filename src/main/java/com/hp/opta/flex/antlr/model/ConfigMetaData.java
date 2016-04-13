@@ -1,8 +1,6 @@
 package com.hp.opta.flex.antlr.model;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Created by zeev on 4/10/16.
@@ -10,18 +8,10 @@ import java.util.regex.Pattern;
 public class ConfigMetaData {
 
 
-    private Pattern regex;
+    private ParsingMethod parsingMethod;
+    private String parseString;
     private int tokenCount;
     private List<FlexToken> tokens;
-
-
-    public Pattern getRegex() {
-        return regex;
-    }
-
-    public void setRegex(String regex) {
-        this.regex = Pattern.compile(regex);
-    }
 
     public int getTokenCount() {
         return tokenCount;
@@ -37,5 +27,21 @@ public class ConfigMetaData {
 
     public void setTokens(List<FlexToken> tokens) {
         this.tokens = tokens;
+    }
+
+    public ParsingMethod getParsingMethod() {
+        return parsingMethod;
+    }
+
+    public void setParsingMethod(ParsingMethod parsingMethod) {
+        this.parsingMethod = parsingMethod;
+    }
+
+    public String getParseString() {
+        return parseString;
+    }
+
+    public void setParseString(String parseString) {
+        this.parseString = parseString;
     }
 }

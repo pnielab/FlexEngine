@@ -34,7 +34,9 @@ public class ParserImpl implements CustomParser {
                 parser.removeErrorListeners();
                 ErrorListener errorListener = new ErrorListener();
                 parser.addErrorListener(errorListener);
-                return resolve(parser);
+                ConfigMetaData configMetaData = resolve(parser);
+                validate(configMetaData);
+                return configMetaData;
             } catch (FlexEngineParseException e) {
                 throw e;
             } catch (Exception e) {
@@ -46,6 +48,12 @@ public class ParserImpl implements CustomParser {
             throw new IllegalArgumentException("config file is null or empty");
         }
 
+    }
+
+    private void validate(ConfigMetaData configMetaData) {
+        if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
+            throw new IllegalArgumentException("token count mismatch to number of tokens");
+        }
     }
 
     private ConfigMetaData resolve(FlexGrammarParser parser) {
