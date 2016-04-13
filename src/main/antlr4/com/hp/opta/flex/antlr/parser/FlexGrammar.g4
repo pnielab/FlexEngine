@@ -5,7 +5,7 @@ grammar FlexGrammar;
 import com.hp.opta.flex.antlr.parser.impl.ParserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.hp.opta.flex.configuration.model.*;
+import com.hp.opta.flex.antlr.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.lang.String;
@@ -17,9 +17,9 @@ import java.lang.Integer;
 
   public static final int WHITESPACE = 2;
 
-  private List<TokenMetaData> finalLdbExpression = null;
+  private List<FlexToken> finalLdbExpression = null;
 
-  private ConfigurationMetaData ConfigurationMetaData = new ConfigurationMetaData();
+  private ConfigMetaData configMetaData = new ConfigMetaData();
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -37,28 +37,29 @@ import java.lang.Integer;
  * Start Symbols
  */
 
-/*parseLdb returns [List<TokenMetaData> ldbResponce]
+/*parseLdb returns [List<FlexToken> ldbResponce]
     @Init {
       $ldbResponce = finalLdbExpression;
     }:
    (ldbExpression) EOF { $ldbResponce = finalLdbExpression; }
 ;*/
 
-parseConfigFile returns [ConfigurationMetaData parseResponse]
+parseConfigFile returns [ConfigMetaData parseResponse]
     @Init {
-      $parseResponse = ConfigurationMetaData;
+      $parseResponse = configMetaData;
     }:
-   (ConfigurationMetaDataExpression) EOF { $parseResponse = ConfigurationMetaData; }
+   (configMetaDataExpression) EOF { $parseResponse = configMetaData; }
 ;
 
 
-ConfigurationMetaDataExpression :
- regex = regexExpression  {ConfigurationMetaData.setRegex($regex.expression);}
-|tokens= predicate {ConfigurationMetaData.setTokens($tokens.tokenObj);}
-|tokenCount = tokenCountExpression {ConfigurationMetaData.setTokenCount($tokenCount.expression);}
+configMetaDataExpression :
+ regex = regexExpression  {configMetaData.setRegex($regex.expression);}
+ tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
+ tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
 /*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}
  | tokenExpression         {$expression = $tokenExpression.expression; parseResponse.setTokens($expression);}*/
 ;
+
 
 regexExpression returns [String expression] :
  'regex=' regex=ID
@@ -113,26 +114,26 @@ ldbExpression:
 ;
 
 
-predicate returns [List<TokenMetaData> tokenObj] :
-    tokensList {$tokenObj=$tokensList.TokenMetaDatas;}
+predicate returns [List<FlexToken> tokenObj] :
+    tokensList {$tokenObj=$tokensList.flexTokens;}
 //    token {$tokenObj=$token.tokenObj;}
 ;
 
 
-token returns [TokenMetaData tokenObj] :
+token returns [FlexToken tokenObj] :
 //  token[3].name=MessageTime
 //  token[3].type=TimeStamp
 //  token[3].format=yyyy-MM-dd HH\:mm\:ss.sss
     'token[' index1=NUMBER '].name=' name=ID
-    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = TokenMetaData.create($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
-    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = TokenMetaData.create($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
+    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = FlexToken.create($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
+    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = FlexToken.create($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
 ;
 
-tokensList returns [List<TokenMetaData> TokenMetaDatas]
+tokensList returns [List<FlexToken> flexTokens]
   @init {
-      $TokenMetaDatas = new ArrayList<>();
+      $flexTokens = new ArrayList<>();
   }:
-  a=token {$TokenMetaDatas.add($a.tokenObj); } ( b=token {$TokenMetaDatas.add($b.tokenObj);})*
+  a=token {$flexTokens.add($a.tokenObj); } ( b=token {$flexTokens.add($b.tokenObj);})*
 ;
 
 //rexCommand returns [LdbExpression expression] :
