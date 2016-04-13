@@ -1,4 +1,4 @@
-package com.hp.opta.flex.antlr.model;
+package com.hp.opta.flex.configuration.model;
 
 /**
  * Created by zeev on 4/13/16.

@@ -1,8 +1,8 @@
 package com.hp.opta.flex.antlr.parser.impl;
 
-import com.hp.opta.flex.antlr.model.ConfigMetaData;
-import com.hp.opta.flex.antlr.model.ParsingMethod;
 import com.hp.opta.flex.antlr.parser.CustomParser;
+import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
+import com.hp.opta.flex.configuration.model.ParsingMethod;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,7 +29,7 @@ public class ParserImplTest {
 
     @Test
     public void testReadTokens() {
-        ConfigMetaData configMetaData = parser.parse(configFile);
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
         Assert.assertNotNull(configMetaData);
         Assert.assertNotNull(configMetaData.getParseString());
         Assert.assertEquals(configMetaData.getParsingMethod(), ParsingMethod.REGEX);

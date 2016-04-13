@@ -2,10 +2,10 @@ package com.hp.opta.flex.antlr.parser.impl;
 
 import com.hp.opta.flex.antlr.exception.ErrorListener;
 import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
-import com.hp.opta.flex.antlr.model.ConfigMetaData;
 import com.hp.opta.flex.antlr.parser.CustomParser;
 import com.hp.opta.flex.antlr.parser.FlexGrammarLexer;
 import com.hp.opta.flex.antlr.parser.FlexGrammarParser;
+import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -22,8 +22,17 @@ public class ParserImpl implements CustomParser {
 
     private static final Logger logger = LoggerFactory.getLogger(ParserImpl.class);
 
+    public static void main(String[] args) {
+        ParserImpl parser = new ParserImpl();
+        String configFile = "token.count=1";
+        ConfigurationMetaData result = parser.parse(configFile);
+        result = null;
+
+
+    }
+
     @Override
-    public ConfigMetaData parse(String configFile) {
+    public ConfigurationMetaData parse(String configFile) {
 
         if (!StringUtils.isEmpty(configFile)) {
             try {
@@ -34,7 +43,7 @@ public class ParserImpl implements CustomParser {
                 parser.removeErrorListeners();
                 ErrorListener errorListener = new ErrorListener();
                 parser.addErrorListener(errorListener);
-                ConfigMetaData configMetaData = resolve(parser);
+                ConfigurationMetaData configMetaData = resolve(parser);
                 validate(configMetaData);
                 return configMetaData;
             } catch (FlexEngineParseException e) {
@@ -50,13 +59,13 @@ public class ParserImpl implements CustomParser {
 
     }
 
-    private void validate(ConfigMetaData configMetaData) {
+    private void validate(ConfigurationMetaData configMetaData) {
         if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
             throw new IllegalArgumentException("token count mismatch to number of tokens");
         }
     }
 
-    private ConfigMetaData resolve(FlexGrammarParser parser) {
+    private ConfigurationMetaData resolve(FlexGrammarParser parser) {
         FlexGrammarParser.ParseConfigFileContext ctx = parser.parseConfigFile();
         if (parser.getNumberOfSyntaxErrors() > 0) {
             ErrorListener errorListener = (ErrorListener) parser.getErrorListeners().get(0);
