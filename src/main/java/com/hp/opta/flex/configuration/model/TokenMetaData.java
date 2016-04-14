@@ -1,11 +1,12 @@
 package com.hp.opta.flex.configuration.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * The Class TokenMetaData.
  */
-public class TokenMetaData {
+public class TokenMetaData implements Serializable{
 
 	/** The index. */
 	private int index;

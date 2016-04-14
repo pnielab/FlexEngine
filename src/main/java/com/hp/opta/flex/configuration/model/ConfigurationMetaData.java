@@ -2,6 +2,7 @@ package com.hp.opta.flex.configuration.model;
 
 import com.hp.opta.flex.configuration.model.tree.Node;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,37 +12,30 @@ import java.util.Map;
 /**
  * The Class ConfigurationMetaData.
  */
-public class ConfigurationMetaData {
+public class ConfigurationMetaData implements Serializable{
 
 
     /**
      * The Constant comparator.
      */
     private static final TokenMetaDataIndexComparator comparator = new TokenMetaDataIndexComparator();
+    
+    
+    /** The parsing method. */
     private ParsingMethod parsingMethod;
 
+    /** The token count. */
     private int tokenCount;
 
-    public int getTokenCount() {
-        return tokenCount;
-    }
-
-    public void setTokenCount(int tokenCount) {
-        this.tokenCount = tokenCount;
-    }
-
-    /**
-     * The parse string.
-     */
+    /** The parse string.*/
     private String parseString;
-    /**
-     * The tokens.
-     */
+    
+    /**The tokens.*/
     private List<TokenMetaData> tokens;
-    /**
-     * The event parse root.
-     */
+    
+    /**The event parse root.*/
     private Map<String, Node<? extends Object>> eventMappings;
+    
 
     /**
      * Instantiates a new configuration meta data.
@@ -51,10 +45,20 @@ public class ConfigurationMetaData {
         eventMappings = new HashMap<>();
     }
 
+    /**
+     * Gets the parsing method.
+     *
+     * @return the parsing method
+     */
     public ParsingMethod getParsingMethod() {
         return parsingMethod;
     }
 
+    /**
+     * Sets the parsing method.
+     *
+     * @param parsingMethod the new parsing method
+     */
     public void setParsingMethod(ParsingMethod parsingMethod) {
         this.parsingMethod = parsingMethod;
     }
@@ -76,7 +80,25 @@ public class ConfigurationMetaData {
     public void setParseString(String parseString) {
         this.parseString = parseString;
     }
+    
+    /**
+     * Gets the token count.
+     *
+     * @return the token count
+     */
+    public int getTokenCount() {
+        return tokenCount;
+    }
 
+    /**
+     * Sets the token count.
+     *
+     * @param tokenCount the new token count
+     */
+    public void setTokenCount(int tokenCount) {
+        this.tokenCount = tokenCount;
+    }
+    
     /**
      * Gets the tokens.
      *

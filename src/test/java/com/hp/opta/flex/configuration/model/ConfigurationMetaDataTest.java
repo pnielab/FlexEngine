@@ -44,7 +44,7 @@ public class ConfigurationMetaDataTest {
 		
 		c.setTokens(list);
 		assertNotNull(c.getTokens());
-		Assert.assertTrue(c.getTokens().size() > 0);
+		Assert.assertTrue(c.getTokens().size() == 5);
 		
 		StringBuilder resultAfterSet = new StringBuilder();
 		
@@ -54,8 +54,39 @@ public class ConfigurationMetaDataTest {
 
 		Assert.assertEquals("12345", resultAfterSet.toString());
 		
+	}
+	
+	@Test
+	public void testAddRemove() {
+		ConfigurationMetaData c = new ConfigurationMetaData();
 		
+		for(int i = 5; i > 0; i--){
+			TokenMetaData t = new TokenMetaData();
+			t.setIndex(i);
+			c.addToken(t);
+		}
 		
+		assertNotNull(c.getTokens());
+		Assert.assertTrue(c.getTokens().size() == 5);
+		
+		StringBuilder resultAfterSet = new StringBuilder();
+		
+		for(TokenMetaData t : c.getTokens()){
+			resultAfterSet.append(t.getIndex());
+		}
+		
+		TokenMetaData token = new TokenMetaData();
+		token.setIndex(5);
+		
+		c.removeToken(token);
+		
+		resultAfterSet = new StringBuilder();
+		
+		for(TokenMetaData t : c.getTokens()){
+			resultAfterSet.append(t.getIndex());
+		}
+
+		Assert.assertEquals("1234", resultAfterSet.toString());
 		
 	}
 	
