@@ -62,7 +62,7 @@ configMetaDataExpression :
 
 
 regexExpression returns [String expression] :
- 'regex=' regex=ID
+ 'regex=' regex=.*
  {$expression = $regex.text;}
 ;
 
@@ -94,16 +94,18 @@ HYPHEN          : '-';
 
 WS              : [ \r\t\n]+ -> channel(WHITESPACE);
 NUMBER          : ('0'..'9')+ '.' ('0'..'9')+  | ('0'..'9')+;
+TOKEN_TYPE      : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
 STRING          : '\"' (ESCAPE_SEQUENCE | ~('"'))* '\"';
 ID              : [a-zA-Z$] [a-zA-Z0-9_]*;
+
+//The name can be in the following format: message_time (all low case, _ between words, no spaces), name_11:00:00
+NAME_FORMAT     : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
 LITERAL         : ~(' ' | '"' | ',' | '(' | ')' | '{' | '}' | '$' | '[' | ']' | '=' | '>' | '<' | '\n' | '\t' | '\r' | ':' | ';' | '|' | '-' | '+' | '/' | '%' | '^'| '*')+;
 ELLIPSES        : '...';
 ESCAPE_SEQUENCE : '\\' '\"' { setText("\""); };
 RELOPERATOR     : ('<' | '<=' | '=' | '>' | '>='); //what about <>?
 FALL_THROUGH    :  .  { reportLexerError( getCharPositionInLine(), getText()); }; // Everything else is wrong, need to be catched here
 
-DO_UNPARSED_EVENTS  : 'do.unparsed.events';
-TOKEN_COUNT         : 'token.count';
 
 /**
  * Rules for LDB
@@ -124,9 +126,9 @@ token returns [TokenMetaData tokenObj] :
 //  token[3].name=MessageTime
 //  token[3].type=TimeStamp
 //  token[3].format=yyyy-MM-dd HH\:mm\:ss.sss
-    'token[' index1=NUMBER '].name=' name=ID
-    'token[' index2=NUMBER '].type=' type='String' //{$tokenObj = FlexToken.create($name.text, $type.text, null, Integer.parseInt($index1.text), Integer.parseInt($index2.text), -1);}
-    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, Integer.parseInt($index1.text), Integer.parseInt($index2.text), ($index3==null?-1:Integer.parseInt($index3.text)));}
+    'token[' index1=NUMBER '].name=' name=NAME_FORMAT
+    ('token[' index2=NUMBER '].type=' type=TOKEN_TYPE)?
+    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
 ;
 
 tokensList returns [List<TokenMetaData> flexTokens]

@@ -78,6 +78,7 @@ public class ConfigurationMetaData implements Serializable{
      * @param parseString the new parses the string
      */
     public void setParseString(String parseString) {
+
         this.parseString = parseString;
     }
     
