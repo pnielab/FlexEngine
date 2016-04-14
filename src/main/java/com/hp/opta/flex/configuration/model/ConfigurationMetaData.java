@@ -74,6 +74,7 @@ public class ConfigurationMetaData {
      * @param parseString the new parses the string
      */
     public void setParseString(String parseString) {
+
         this.parseString = parseString;
     }
 

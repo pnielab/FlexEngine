@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
+import java.util.regex.Pattern;
 
 /**
  * Created by zeev on 4/11/16.
@@ -22,24 +23,15 @@ public class ParserImpl implements CustomParser {
 
     private static final Logger logger = LoggerFactory.getLogger(ParserImpl.class);
 
-    public static void main(String[] args) {
-        ParserImpl parser = new ParserImpl();
-        String configFile = "token.count=1";
-        ConfigurationMetaData result = parser.parse(configFile);
-        result = null;
-
-
-    }
-
     @Override
     public ConfigurationMetaData parse(String configFile) {
-
+        FlexGrammarParser parser = null;
         if (!StringUtils.isEmpty(configFile)) {
             try {
                 CharStream input = new ANTLRInputStream(new StringReader(configFile));
                 FlexGrammarLexer lex = new FlexGrammarLexer(input);
                 CommonTokenStream tokens = new CommonTokenStream(lex);
-                FlexGrammarParser parser = new FlexGrammarParser(tokens);
+                parser = new FlexGrammarParser(tokens);
                 parser.removeErrorListeners();
                 ErrorListener errorListener = new ErrorListener();
                 parser.addErrorListener(errorListener);
@@ -59,6 +51,8 @@ public class ParserImpl implements CustomParser {
 
     }
 
+
+
     private void validate(ConfigurationMetaData configMetaData) {
         if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
             throw new IllegalArgumentException("token count mismatch to number of tokens");
@@ -69,9 +63,10 @@ public class ParserImpl implements CustomParser {
         FlexGrammarParser.ParseConfigFileContext ctx = parser.parseConfigFile();
         if (parser.getNumberOfSyntaxErrors() > 0) {
             ErrorListener errorListener = (ErrorListener) parser.getErrorListeners().get(0);
-            logger.error("syntax error when parsing tokens: ", errorListener.getErrorMessage(), errorListener.getException());
             throw new FlexEngineParseException("syntax error when parsing tokens", errorListener.getException());
         }
         return ctx.parseResponse;
     }
+
+
 }
