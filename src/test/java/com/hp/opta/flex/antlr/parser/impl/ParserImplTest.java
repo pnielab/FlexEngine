@@ -2,12 +2,14 @@ package com.hp.opta.flex.antlr.parser.impl;
 
 import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
 import com.hp.opta.flex.antlr.parser.CustomParser;
-import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
-import com.hp.opta.flex.configuration.model.ParsingMethod;
-import com.hp.opta.flex.configuration.model.TokenMetaData;
+import com.hp.opta.flex.configuration.model.*;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * Created by zeev on 4/11/16.
@@ -59,6 +61,55 @@ public class ParserImplTest {
         String input = "regex=aregexexpretion\n" +
                 "token.count=1";
         ConfigurationMetaData configMetaData = parser.parse(input);
+    }
+
+
+  /*  @Test
+    public void testCheckTypeIsTimeStampAndCorrectFormatIsGiven() {
+        Map<String, String> dateFormats = (Map<String, String>) ReflectionTestUtils.getField(new MetaDataFactory(), "dateFormats");
+        Assert.assertNotNull(dateFormats);
+        Collection<String> values = dateFormats.values();
+        Assert.assertTrue(values.size() > 0);
+        String format = values.stream().findFirst().get();
+
+        String configFile = "regex=scaninboundpass()outboundsmtp\n" +
+                "token.count=1\n" +
+                "token[0].name=" + NAME + "\n" +
+                "token[0].type=" + TokenType.TimeStamp.name() + "\n" +
+                "token[0].format=" + format;
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+    }*/
+
+    @Test(expected = FlexEngineParseException.class)
+    public void testCheckTypeIsTimeStampAndIncorrectFormatIsGiven() {
+
+        String configFile = "regex=scaninboundpass()outboundsmtp\n" +
+                "token.count=1\n" +
+                "token[0].name=" + NAME + "\n" +
+                "token[0].type=" + TokenType.TimeStamp.name() + "\n" +
+                "token[0].format=" + "wrongformat";
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+    }
+
+    @Test(expected = FlexEngineParseException.class)
+    public void testCheckTypeIsTimeStampAndNoFormatIsGiven() {
+        String configFile = "regex=scaninboundpass()outboundsmtp\n" +
+                "token.count=1\n" +
+                "token[0].name=" + NAME + "\n" +
+                "token[0].type=" + TokenType.TimeStamp.name();
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+    }
+
+    @Test
+    public void testCheckTypeIsNoTimeStamp() {
+        String configFile = "regex=scaninboundpass()outboundsmtp\n" +
+                "token.count=1\n" +
+                "token[0].name=" + NAME + "\n" +
+                "token[0].type=" + TokenType.Integer.name();
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+        TokenMetaData token = configMetaData.getTokens().get(0);
+        Assert.assertEquals(TokenType.Integer, token.getType());
+        Assert.assertNull(token.getFormat());
     }
 
 

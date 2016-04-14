@@ -3,6 +3,10 @@
  */
 package com.hp.opta.flex.configuration.model;
 
+import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +16,7 @@ import java.util.Map;
 public class MetaDataFactory {
 
 
+    private static final Logger logger = LoggerFactory.getLogger(MetaDataFactory.class);
     private static Map<String, String> dateFormats;
 
     static {
@@ -40,11 +45,13 @@ public class MetaDataFactory {
                                                     String index1, String index2, String index3) {
 
         if (index2 != null && index3 != null && ((!index1.equals(index2)) || (!index2.equals(index3)) || (!index1.equals(index3)))) {
-            return null;
+            logger.error("index do not match when trying to parse token with name: {}, index1: {}, index2: {}, index3: {}", name, index1, index2, index3);
+            throw new FlexEngineParseException("index do not match when trying to parse token with name: " + name);
         }
         TokenType tokenType = (type == null) ? null : TokenType.valueOf(type);
-        if (TokenType.TimeStamp.equals(type) && dateFormats.get(format) == null) {
-            return null;
+        if (TokenType.TimeStamp.equals(tokenType) && dateFormats.get(format) == null) {
+            logger.error("unsupported format: {}", format);
+            throw new FlexEngineParseException("unsupported format: " + format);
         }
         return new TokenMetaData(name, tokenType, format, Integer.parseInt(index1));
     }
