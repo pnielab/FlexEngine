@@ -11,7 +11,7 @@ public class ParserUtils {
         return (text == null || text.isEmpty()) ? text : text.substring(1, text.length() - 1);
     }
 
-    public static ConfigurationMetaData getConfigurationMetaData(int tokenCount){
-        return null;
+    public static ConfigurationMetaData createConfigurationMetaDataIfNull(ConfigurationMetaData configurationMetaData, int tokenCount) {
+        return configurationMetaData != null ? configurationMetaData : new ConfigurationMetaData(tokenCount);
     }
 }

@@ -20,7 +20,7 @@ import java.lang.Integer;
 
   private List<TokenMetaData> finalLdbExpression = null;
 
-  private ConfigurationMetaData configMetaData = new ConfigurationMetaData();
+  private ConfigurationMetaData configMetaData = null;
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -48,14 +48,17 @@ parseConfigFile returns [ConfigurationMetaData parseResponse]
 
 
 configMetaDataExpression :
+
+TOKEN_COUNT tokenCount = ANY_TEXT {
+        String tokenCountResult = ParserUtils.getAnyString($tokenCount.text);
+        int tokenCountResultAsInt = Integer.parseInt(tokenCountResult);
+        configMetaData = ParserUtils.createConfigurationMetaDataIfNull(configMetaData, tokenCountResultAsInt);
+}
+
 REGEX regex=ANY_TEXT {
         String regexResult = ParserUtils.getAnyString($regex.text);
         configMetaData.setParseString(regexResult);
         configMetaData.setParsingMethod(ParsingMethod.REGEX);
-}
-TOKEN_COUNT tokenCount = ANY_TEXT {
-        String tokenCountResult = ParserUtils.getAnyString($tokenCount.text);
-        configMetaData.setTokenCount(Integer.parseInt(tokenCountResult));
 }
  addAllTokens
 ;

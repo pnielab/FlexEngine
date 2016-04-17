@@ -18,26 +18,26 @@ import com.hp.opta.flex.configuration.model.tree.Node;
  */
 public class ConfigurationMetaData implements Serializable{
 
-	
+
 
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
     /** The Constant comparator. */
     private static final TokenMetaDataIndexComparator comparator = new TokenMetaDataIndexComparator();
-    
+
     /** The parsing method. */
     private ParsingMethod parsingMethod;
 
     /** The parse string.*/
     private String parseString;
-    
+
     /**The tokens.*/
     private List<TokenMetaData> tokens;
-    
+
     /**The event parse root.*/
     private Map<String, Node<? extends Object>> eventMappings;
-    
+
 
     /**
      * Instantiates a new configuration meta data.
@@ -46,8 +46,8 @@ public class ConfigurationMetaData implements Serializable{
         tokens = new ArrayList<>();
         eventMappings = new HashMap<>();
     }
-    
-    
+
+
     /**
      * Instantiates a new configuration meta data.
      *
@@ -96,7 +96,7 @@ public class ConfigurationMetaData implements Serializable{
 
         this.parseString = parseString;
     }
-    
+
     /**
      * Gets the token count.
      *
@@ -114,7 +114,7 @@ public class ConfigurationMetaData implements Serializable{
     public void setTokenCount(int tokenCount) {
     	tokens = new ArrayList<>(tokenCount);
     }
-    
+
 
     /**
      * Gets the tokens iterator.
@@ -123,7 +123,7 @@ public class ConfigurationMetaData implements Serializable{
      */
     public Iterable<TokenMetaData> getTokens() {
         return tokens;
-    }    
+    }
 
 
     /**
@@ -156,7 +156,7 @@ public class ConfigurationMetaData implements Serializable{
     public void addEventMapping(String key, Node<? extends Object> node) {
         this.eventMappings.put(key, node);
     }
-    
+
 
     /**
      * Removes the event mapping.
