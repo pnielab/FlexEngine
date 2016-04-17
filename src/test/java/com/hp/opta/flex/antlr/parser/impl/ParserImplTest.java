@@ -19,7 +19,7 @@ public class ParserImplTest {
 
     //The name can be in the following format: message_time (all low case, _ between words, no spaces), name_11:00:00
     //NAME_FORMAT     : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
-    private static final String NAME = "name_11:00:00";
+    private static final String NAME = "Message_time";
     private static final String REGEX = ".*(scan|inbound/pass[12]|outbound/smtp)\\[(\\d+)\\]:\\s*(?:([\\w.-]+)" +
             "\\[)?(\\d+\\.\\d+\\.\\d+\\.\\d+)\\]?\\s+(\\S+)\\s+(\\d+)\\s+(\\d+)\\s+(RECV|SCAN|SEND)\\s+(.*)";
 
@@ -67,7 +67,7 @@ public class ParserImplTest {
         Assert.assertTrue(NAME.equals(token.getName()));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = FlexEngineParseException.class)
     public void testCheckNameIsWithIllegalCaracters() {
         String input = "regex=" + REGEX + '\n' +
                 "token.count=1\n" +
@@ -119,7 +119,7 @@ public class ParserImplTest {
         Assert.assertNull(token.getFormat());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = FlexEngineParseException.class)
     public void testCheckTypeIsIllegal() {
         String configFile = "regex=" + REGEX + '\n' +
                 "token.count=1\n" +
