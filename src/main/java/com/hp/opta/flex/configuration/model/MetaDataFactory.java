@@ -35,7 +35,7 @@ public class MetaDataFactory {
         dateFormats.put("dd MMM yyyy", "dd MMM yyyy");
         dateFormats.put("dd MMMM yyyy", "dd MMMM yyyy");
 
-        namePattern = Pattern.compile("([a-z]*)_([0-2][0-4]:[0-5][0-9]:[0-5][0-9])");
+        namePattern = Pattern.compile("([a-z]*)_([0-2][0-4]:[0-5][0-9]:[0-5][0-9])|([a-zA-Z]*)");
         typePattern = Pattern.compile("String|Long|Integer|TimeStamp|Boolean|Double");
     }
 
