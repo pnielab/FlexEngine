@@ -1,5 +1,6 @@
 package com.hp.opta.flex.configuration.model;
 
+import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,10 +26,14 @@ public class MetaDataFactoryTest {
         Assert.assertEquals("testFormat", test.getFormat());
         Assert.assertEquals(TokenType.Integer, test.getType());
 
-
-        test = MetaDataFactory.createTokenMetaData(
-                "testName", "Integer", "testFormat", "1", "2", "3");
-        Assert.assertNull("The Object should be null", test);
+        FlexEngineParseException formatError = null;
+        try {
+            test = MetaDataFactory.createTokenMetaData(
+                    "testName", "Integer", "testFormat", "1", "2", "3");
+        } catch (FlexEngineParseException e) {
+            formatError = e;
+        }
+        Assert.assertNotNull(formatError);
     }
 
 }
