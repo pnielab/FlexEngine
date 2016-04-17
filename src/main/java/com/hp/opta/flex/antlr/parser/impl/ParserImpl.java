@@ -67,6 +67,4 @@ public class ParserImpl implements CustomParser {
         }
         return ctx.parseResponse;
     }
-
-
 }
