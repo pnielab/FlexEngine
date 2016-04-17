@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
-import java.util.regex.Pattern;
 
 /**
  * Created by zeev on 4/11/16.
@@ -38,7 +37,7 @@ public class ParserImpl implements CustomParser {
                 ConfigurationMetaData configMetaData = resolve(parser);
                 validate(configMetaData);
                 return configMetaData;
-            } catch (FlexEngineParseException e) {
+            } catch (IllegalArgumentException | FlexEngineParseException e) {
                 throw e;
             } catch (Exception e) {
                 logger.error("unable to parse config file, error: {}", e.getMessage(), e);
@@ -50,7 +49,6 @@ public class ParserImpl implements CustomParser {
         }
 
     }
-
 
 
     private void validate(ConfigurationMetaData configMetaData) {

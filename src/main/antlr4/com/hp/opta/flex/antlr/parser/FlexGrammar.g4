@@ -43,13 +43,6 @@ import java.lang.Integer;
  * Start Symbols
  */
 
-/*parseLdb returns [List<FlexToken> ldbResponce]
-    @Init {
-      $ldbResponce = finalLdbExpression;
-    }:
-   (ldbExpression) EOF { $ldbResponce = finalLdbExpression; }
-;*/
-
 parseConfigFile returns [ConfigurationMetaData parseResponse]
     @Init {
       $parseResponse = configMetaData;
@@ -75,37 +68,21 @@ TOKEN_COUNT tokenCount = ANY_TEXT {
 
 
 
-
-
 /**
  * Tokens
  */
-
-
-/*
-WS              : [ \r\t\n]+ -> channel(WHITESPACE);
-REGEX           : 'regex';
-TOKEN_COUNT     : 'token.count';
-// need to talk about the number as a token
-NUMBER          : ('0'..'9')+ '.' ('0'..'9')+  | ('0'..'9')+;
-TOKEN_NAME      : 'token[' index1=NUMBER '].name';
-TOKEN_TYPE      : 'token[' index2=NUMBER '].type';
-TOKEN_FORMAT    : 'token[' index3=NUMBER '].format';
-ANY_TEXT        : '=' ~([ \r\t\n])+ '\n';*/
-
 
 WS                  : [ \r\t\n]+ -> channel(WHITESPACE);
 NUMBER              : ('0'..'9')+;
 REGEX               : 'regex';
 TOKEN_COUNT         : 'token.count';
 TOKEN_START         : 'token[';
-TOKEN_NAME          : '].name';
-TOKEN_TYPE          : '].type';
-TOKEN_FORMAT        : '].format';
-//ID                  : [a-zA-Z0-9_]+;
-//NAME_FORMAT         : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
-//TYPE_FORMAT      : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
-//DATE_FORMAT         : [,yMdHmsSTZ:'/null ]+;
+TOKEN_NAME          : '].name=';
+TOKEN_TYPE          : '].type=';
+TOKEN_FORMAT        : '].format=';
+TYPE_FORMAT         : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
+ID                  : [a-zA-Z0-9_]+;
+DATE_FORMAT         : [,yMdHmsSTZ:'/null ]+;
 ANY_TEXT            : '=' ~([ \r\t\n])+ '\n';
 
 
@@ -125,14 +102,13 @@ predicate returns [List<TokenMetaData> tokenObj] :
 
 
 token returns [TokenMetaData tokenObj] :
-    TOKEN_START index1=NUMBER TOKEN_NAME name=ANY_TEXT
-    (TOKEN_START index2=NUMBER TOKEN_TYPE type=ANY_TEXT)?
-    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=ANY_TEXT)?
+
+   TOKEN_START index1=NUMBER TOKEN_NAME name=ID
+    (TOKEN_START index2=NUMBER TOKEN_TYPE type=TYPE_FORMAT)?
+    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=DATE_FORMAT)?
+
   {
-  String nameResult = getAnyString($name.text);
-  String typeResult = getAnyString($type.text);
-  String formatResult = getAnyString($format.text);
-  $tokenObj = MetaDataFactory.createTokenMetaData(nameResult, typeResult, formatResult, $index1.text, $index2.text, $index3.text);}
+  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
 ;
 
 tokensList returns [List<TokenMetaData> flexTokens]

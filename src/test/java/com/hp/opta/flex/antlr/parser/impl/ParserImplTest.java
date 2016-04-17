@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ public class ParserImplTest {
 
     //The name can be in the following format: message_time (all low case, _ between words, no spaces), name_11:00:00
     //NAME_FORMAT     : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
-    private static final String NAME = "name_11:00:00";
+    private static final String NAME = "Message_time";
     private static final String REGEX = ".*(scan|inbound/pass[12]|outbound/smtp)\\[(\\d+)\\]:\\s*(?:([\\w.-]+)" +
             "\\[)?(\\d+\\.\\d+\\.\\d+\\.\\d+)\\]?\\s+(\\S+)\\s+(\\d+)\\s+(\\d+)\\s+(RECV|SCAN|SEND)\\s+(.*)";
 
@@ -30,7 +31,7 @@ public class ParserImplTest {
     }
 
     @Test(expected = FlexEngineParseException.class)
-    public void testParsingMissingRegexCorrectly() {
+    public void testCheckFailureWhenRegexIsMissing() {
         String input = "token.count=1\n" +
                 "token[0].name=" + NAME + '\n';
         ConfigurationMetaData configMetaData = parser.parse(input);
@@ -73,14 +74,6 @@ public class ParserImplTest {
                 "token[0].name=" + "name_31:11:00\n";
         ConfigurationMetaData configMetaData = parser.parse(input);
     }
-
-    @Test(expected = FlexEngineParseException.class)
-    public void testCheckNameIsMissing() {
-        String input = "regex=" + REGEX + '\n' +
-                "token.count=1\n";
-        ConfigurationMetaData configMetaData = parser.parse(input);
-    }
-
 
     @Test
     public void testCheckTypeIsTimeStampAndCorrectFormatIsGiven() {
@@ -126,35 +119,64 @@ public class ParserImplTest {
         Assert.assertNull(token.getFormat());
     }
 
+    @Test(expected = FlexEngineParseException.class)
+    public void testCheckTypeIsIllegal() {
+        String configFile = "regex=" + REGEX + '\n' +
+                "token.count=1\n" +
+                "token[0].name=" + NAME + "\n" +
+                "token[0].type=" + "IllegalFormat" + '\n';
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+    }
+
 
     @Test
     public void testReadTokens() {
+
+        int tokenCount = 9;
+        Map<String, String> names = new HashMap<String, String>();
+        names.put("Process", "Process");
+        names.put("ProcessID", "ProcessID");
+        names.put("ClientHost", "ClientHost");
+        names.put("ClientIP", "ClientIP");
+        names.put("MessageID", "MessageID");
+        names.put("Start", "Start");
+        names.put("End", "End");
+        names.put("Service", "Service");
+        names.put("Info", "Info");
+
+
         String format = getSupportedFormat();
+
+
         String configFile = "regex=" + REGEX + '\n' +
-                "token.count=2\n" +
-                "token[0].name=" + NAME + '\n' +
-                "token[1].name=" + NAME + '\n'
-                + "token[1].type=" + TokenType.TimeStamp.name() + '\n'
-                + "token[1].format=" + format + '\n';
-        ;
+                "token.count=" + tokenCount + '\n'
+                + "token[0].name=" + names.get("Process") + '\n'
+                + "token[1].name=" + names.get("ProcessID") + '\n'
+                + "token[2].name=" + names.get("ClientHost") + '\n'
+                + "token[3].name=" + names.get("ClientIP") + '\n'
+                + "token[4].name=" + names.get("MessageID") + '\n'
+                + "token[5].name=" + names.get("Start") + '\n'
+                + "token[6].name=" + names.get("End") + '\n'
+                + "token[7].name=" + names.get("Service") + '\n'
+                + "token[8].name=" + names.get("Info") + '\n';
+
 
         ConfigurationMetaData configMetaData = parser.parse(configFile);
         Assert.assertNotNull(configMetaData);
         Assert.assertNotNull(configMetaData.getParseString());
         Assert.assertEquals(configMetaData.getParsingMethod(), ParsingMethod.REGEX);
         Assert.assertNotNull(configMetaData.getTokens());
-        Assert.assertEquals(configMetaData.getTokens().size(), 2);
-        Assert.assertEquals(configMetaData.getTokenCount(), 2);
+        Assert.assertEquals(configMetaData.getTokens().size(), tokenCount);
+        Assert.assertEquals(configMetaData.getTokenCount(), tokenCount);
         Assert.assertTrue(configMetaData.getParseString().equals(REGEX));
 
-        Assert.assertTrue(NAME.equals(configMetaData.getTokens().get(0).getName()));
-        Assert.assertNull(configMetaData.getTokens().get(0).getType());
-        Assert.assertNull(configMetaData.getTokens().get(0).getFormat());
-
-        Assert.assertTrue(NAME.equals(configMetaData.getTokens().get(1).getName()));
-        Assert.assertTrue(configMetaData.getTokens().get(1).getType() == TokenType.TimeStamp);
-        Assert.assertTrue(configMetaData.getTokens().get(1).getFormat().equals(format));
+        for (TokenMetaData token : configMetaData.getTokens()) {
+            Assert.assertNotNull(names.get(token.getName()));
+            Assert.assertNull(token.getType());
+            Assert.assertNull(token.getFormat());
+        }
     }
+
 
     private String getSupportedFormat() {
         Map<String, String> dateFormats = (Map<String, String>) ReflectionTestUtils.getField(new MetaDataFactory(), "dateFormats");
