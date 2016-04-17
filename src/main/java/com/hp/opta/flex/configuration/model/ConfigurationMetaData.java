@@ -58,6 +58,8 @@ public class ConfigurationMetaData implements Serializable{
         eventMappings = new HashMap<>();
     }
 
+
+
     /**
      * Gets the parsing method.
      *
