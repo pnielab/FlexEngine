@@ -1,7 +1,6 @@
 package com.hp.opta.flex.execution.parsers;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 
@@ -45,13 +44,11 @@ public class DefaultEventParser<T extends Object, R extends Object> implements E
 		Matcher matcher = parsingData.getParsePattern().matcher(String.valueOf(input));
 		matcher.find();
 		
-		List<TokenMetaData> tokensList = parsingData.getConfigurationMetaData().getTokens();
+		Iterable<TokenMetaData> tokens = parsingData.getConfigurationMetaData().getTokens();
 		
-		Map<String, String> map = new HashMap<>(tokensList.size(), 1f);
+		Map<String, String> map = new HashMap<>(parsingData.getConfigurationMetaData().getTokenCount(), 1f);
 		
-		for(TokenMetaData tmd : tokensList){
-			map.put(tmd.getName(), matcher.group(tmd.getIndex()));
-		}
+		tokens.forEach((tmd) -> map.put(tmd.getName(), matcher.group(tmd.getIndex())));
 		
 		return (R)map;
 	}

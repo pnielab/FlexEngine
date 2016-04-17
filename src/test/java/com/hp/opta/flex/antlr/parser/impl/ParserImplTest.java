@@ -62,8 +62,8 @@ public class ParserImplTest {
         ConfigurationMetaData configMetaData = parser.parse(input);
         Assert.assertNotNull(configMetaData);
         Assert.assertNotNull(configMetaData.getTokens());
-        Assert.assertEquals(configMetaData.getTokens().size(), 1);
-        TokenMetaData token = configMetaData.getTokens().get(0);
+        Assert.assertEquals(configMetaData.getTokenCount(), 1);
+        TokenMetaData token = configMetaData.getTokens().iterator().next();
         Assert.assertTrue(NAME.equals(token.getName()));
     }
 
@@ -114,7 +114,7 @@ public class ParserImplTest {
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.Integer.name() + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
-        TokenMetaData token = configMetaData.getTokens().get(0);
+        TokenMetaData token = configMetaData.getTokens().iterator().next();
         Assert.assertEquals(TokenType.Integer, token.getType());
         Assert.assertNull(token.getFormat());
     }
@@ -166,7 +166,7 @@ public class ParserImplTest {
         Assert.assertNotNull(configMetaData.getParseString());
         Assert.assertEquals(configMetaData.getParsingMethod(), ParsingMethod.REGEX);
         Assert.assertNotNull(configMetaData.getTokens());
-        Assert.assertEquals(configMetaData.getTokens().size(), tokenCount);
+        Assert.assertEquals(configMetaData.getTokenCount(), tokenCount);
         Assert.assertEquals(configMetaData.getTokenCount(), tokenCount);
         Assert.assertTrue(configMetaData.getParseString().equals(REGEX));
 

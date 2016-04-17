@@ -23,11 +23,9 @@ public class TokenMetaDataIndexComparatorTest {
 
 	@Test
 	public void testBasic() {
-		TokenMetaData t1 = new TokenMetaData();
-		t1.setIndex(1);
+		TokenMetaData t1 = new TokenMetaData("",TokenType.Integer,"",1);
 		
-		TokenMetaData t2 = new TokenMetaData();
-		t2.setIndex(2);
+		TokenMetaData t2 = new TokenMetaData("",TokenType.Integer,"",2);
 		
 		int result = comparator.compare(t1, t2);
 		
@@ -40,8 +38,7 @@ public class TokenMetaDataIndexComparatorTest {
 		
 		List<TokenMetaData> list = new LinkedList<>();
 		for(int i = 5; i > 0; i--){
-			TokenMetaData t = new TokenMetaData();
-			t.setIndex(i);
+			TokenMetaData t = new TokenMetaData("",TokenType.Integer,"",i);
 			list.add(t);
 		}
 

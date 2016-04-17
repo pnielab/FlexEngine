@@ -52,9 +52,10 @@ public class ParserImpl implements CustomParser {
 
 
     private void validate(ConfigurationMetaData configMetaData) {
-        if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
+/*        if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
             throw new IllegalArgumentException("token count mismatch to number of tokens");
-        }
+        }*/
+    	return;
     }
 
     private ConfigurationMetaData resolve(FlexGrammarParser parser) {

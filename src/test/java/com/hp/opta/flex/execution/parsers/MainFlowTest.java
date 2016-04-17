@@ -39,7 +39,7 @@ public class MainFlowTest {
 		conf = new ConfigurationMetaData();
 		List<TokenMetaData> tokensList = createTokenMetaDataList(DATA_SIZE);
 		conf.setTokenCount(tokensList.size());
-		conf.setTokens(tokensList);
+		tokensList.forEach((tmd) -> conf.addToken(tmd));
 		conf.setParsingMethod(ParsingMethod.REGEX);
 		conf.setParseString(createRegex(DATA_SIZE));
 		
