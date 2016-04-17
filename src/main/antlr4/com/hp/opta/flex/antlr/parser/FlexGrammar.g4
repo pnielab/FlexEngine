@@ -62,11 +62,23 @@ TOKEN_COUNT tokenCount = ANY_TEXT {
         String tokenCountResult = getAnyString($tokenCount.text);
         configMetaData.setTokenCount(Integer.parseInt(tokenCountResult));
 }
- tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
+ addAllTokens
+;
+
+token returns [TokenMetaData tokenObj] :
+
+   TOKEN_START index1=NUMBER TOKEN_NAME name=ID
+    (TOKEN_START index2=NUMBER TOKEN_TYPE type=TYPE_FORMAT)?
+    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=DATE_FORMAT)?
+
+  {
+  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
 ;
 
 
-
+addAllTokens:
+  a=token {configMetaData.addToken($a.tokenObj); } ( b=token {configMetaData.addToken($b.tokenObj);})*
+;
 
 /**
  * Tokens
@@ -87,33 +99,4 @@ ANY_TEXT            : '=' ~([ \r\t\n])+ '\n';
 
 
 
-/**
- * Rules for LDB
- */
 
-ldbExpression:
-  predicate {finalLdbExpression = $predicate.tokenObj; }
-;
-
-
-predicate returns [List<TokenMetaData> tokenObj] :
-    tokensList {$tokenObj=$tokensList.flexTokens;}
-;
-
-
-token returns [TokenMetaData tokenObj] :
-
-   TOKEN_START index1=NUMBER TOKEN_NAME name=ID
-    (TOKEN_START index2=NUMBER TOKEN_TYPE type=TYPE_FORMAT)?
-    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=DATE_FORMAT)?
-
-  {
-  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
-;
-
-tokensList returns [List<TokenMetaData> flexTokens]
-  @init {
-      $flexTokens = new ArrayList<>();
-  }:
-  a=token {$flexTokens.add($a.tokenObj); } ( b=token {$flexTokens.add($b.tokenObj);})*
-;
