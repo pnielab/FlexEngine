@@ -154,7 +154,7 @@ public class ConfigurationMetaData implements Serializable{
     public void addEventMapping(String key, Node<? extends Object> node) {
         this.eventMappings.put(key, node);
     }
-
+    
 
     /**
      * Removes the event mapping.
