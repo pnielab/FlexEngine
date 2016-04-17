@@ -20,10 +20,10 @@ public class EventParsingDataHolder {
 	 * @param identifier the identifier
 	 * @param metaData the meta data
 	 */
-	public static void publish(String sourceType, ConfigurationMetaData metaData){
+	public static EventParsingData publish(String sourceType, ConfigurationMetaData metaData){
 		EventParsingData eventParsingData = new EventParsingData(metaData);
 		eventParsingData.initialize();
-		configurations.put(sourceType, eventParsingData);
+		return configurations.put(sourceType, eventParsingData);
 	}
 	
 	

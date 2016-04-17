@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.hp.opta.flex.execution;
 
 import java.util.Map;
@@ -8,6 +11,9 @@ import com.hp.opta.flex.execution.parsers.DefaultEventParser;
 
 /**
  * The Class FilterExcecutionHolder.
+ *
+ * @author Yoav Nordmann
+ * @since Apr 17, 2016
  */
 public class ParsingExcecutioner {
 	
@@ -38,7 +44,7 @@ public class ParsingExcecutioner {
 	 * @param event the event
 	 * @return the object
 	 */
-	public static Object runThroughFilter(String sourceType, Object event){
+	public static Object parse(String sourceType, Object event){
 		EventParser parser = getEventParser(sourceType);
 		return parser.parse(event);
 	}
