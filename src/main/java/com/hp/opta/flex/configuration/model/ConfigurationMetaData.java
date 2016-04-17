@@ -1,16 +1,21 @@
 package com.hp.opta.flex.configuration.model;
 
-import com.hp.opta.flex.configuration.model.tree.Node;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import com.hp.opta.flex.configuration.model.tree.Node;
 
 
 /**
  * The Class ConfigurationMetaData.
+ *
+ * @author yoavn
+ * @since Apr 17, 2016
  */
 public class ConfigurationMetaData implements Serializable{
 
@@ -23,9 +28,6 @@ public class ConfigurationMetaData implements Serializable{
     
     /** The parsing method. */
     private ParsingMethod parsingMethod;
-
-    /** The token count. */
-    private int tokenCount;
 
     /** The parse string.*/
     private String parseString;
@@ -41,7 +43,18 @@ public class ConfigurationMetaData implements Serializable{
      * Instantiates a new configuration meta data.
      */
     public ConfigurationMetaData() {
-        tokens = new LinkedList<>();
+        tokens = new ArrayList<>();
+        eventMappings = new HashMap<>();
+    }
+    
+    
+    /**
+     * Instantiates a new configuration meta data.
+     *
+     * @param tokenCount the token count
+     */
+    public ConfigurationMetaData(int tokenCount) {
+        tokens = new ArrayList<>(tokenCount);
         eventMappings = new HashMap<>();
     }
 
@@ -88,7 +101,7 @@ public class ConfigurationMetaData implements Serializable{
      * @return the token count
      */
     public int getTokenCount() {
-        return tokenCount;
+        return tokens.size();
     }
 
     /**
@@ -97,28 +110,18 @@ public class ConfigurationMetaData implements Serializable{
      * @param tokenCount the new token count
      */
     public void setTokenCount(int tokenCount) {
-        this.tokenCount = tokenCount;
+    	tokens = new ArrayList<>(tokenCount);
     }
     
-    /**
-     * Gets the tokens.
-     *
-     * @return the tokens
-     */
-    public List<TokenMetaData> getTokens() {
-        return tokens;
-    }
 
     /**
-     * Sets the tokens.
+     * Gets the tokens iterator.
      *
-     * @param tokens the new tokens
+     * @return the tokens iterator
      */
-    public void setTokens(List<TokenMetaData> tokens) {
-        this.tokens = tokens;
-        ;
-        this.tokens.sort(comparator);
-    }
+    public Iterable<TokenMetaData> getTokens() {
+        return tokens;
+    }    
 
 
     /**
@@ -133,31 +136,12 @@ public class ConfigurationMetaData implements Serializable{
 
 
     /**
-     * Removes the token.
-     *
-     * @param token the token
-     */
-    public void removeToken(TokenMetaData token) {
-        this.tokens.remove(token);
-    }
-
-
-    /**
      * Gets the event mappings.
      *
      * @return the event mappings
      */
-    public Map<String, Node<? extends Object>> getEventMappings() {
-        return eventMappings;
-    }
-
-    /**
-     * Sets the event mappings.
-     *
-     * @param eventMappings the event mappings
-     */
-    public void setEventMappings(Map<String, Node<? extends Object>> eventMappings) {
-        this.eventMappings = eventMappings;
+    public Iterator<Entry<String, Node<? extends Object>>> getEventMappings() {
+    	return eventMappings.entrySet().iterator();
     }
 
 

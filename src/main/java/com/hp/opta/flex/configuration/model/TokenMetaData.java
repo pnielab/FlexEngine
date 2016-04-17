@@ -55,14 +55,6 @@ public class TokenMetaData implements Serializable{
 		return index;
 	}
 	
-	/**
-	 * Sets the index.
-	 *
-	 * @param index the new index
-	 */
-	public void setIndex(int index) {
-		this.index = index;
-	}
 	
 	/**
 	 * Gets the name.
@@ -73,14 +65,6 @@ public class TokenMetaData implements Serializable{
 		return name;
 	}
 	
-	/**
-	 * Sets the name.
-	 *
-	 * @param name the new name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	/**
 	 * Gets the type.
@@ -91,14 +75,6 @@ public class TokenMetaData implements Serializable{
 		return type;
 	}
 	
-	/**
-	 * Sets the type.
-	 *
-	 * @param type the new type
-	 */
-	public void setType(TokenType type) {
-		this.type = type;
-	}
 	
 	/**
 	 * Gets the format.
