@@ -39,8 +39,7 @@ public class ParserImplTest {
 
     @Test
     public void testParsingRegexCorrectly() {
-        String input = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String input = "token.count=1\n" + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + '\n';
         ConfigurationMetaData configMetaData = parser.parse(input);
         Assert.assertTrue(configMetaData.getParseString().equals(REGEX));
@@ -49,15 +48,13 @@ public class ParserImplTest {
 
     @Test(expected = FlexEngineParseException.class)
     public void testCheckFailureWhenNameIsMissing() {
-        String input = "regex=" + REGEX + '\n' +
-                "token.count=1\n";
+        String input = "token.count=1\n" + "regex=" + REGEX + '\n';
         ConfigurationMetaData configMetaData = parser.parse(input);
     }
 
     @Test
     public void testCheckNameIsParsedCorrectlyAndNotMissing() {
-        String input = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String input = "token.count=1\n" + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + '\n';
         ConfigurationMetaData configMetaData = parser.parse(input);
         Assert.assertNotNull(configMetaData);
@@ -79,8 +76,7 @@ public class ParserImplTest {
     public void testCheckTypeIsTimeStampAndCorrectFormatIsGiven() {
 
         String format = getSupportedFormat();
-        String configFile = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String configFile = "token.count=1\n" + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.TimeStamp.name() + "\n" +
                 "token[0].format=" + format + '\n';
@@ -109,8 +105,7 @@ public class ParserImplTest {
 
     @Test
     public void testCheckTypeIsNoTimeStamp() {
-        String configFile = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String configFile = "token.count=1\n" + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.Integer.name() + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
@@ -148,8 +143,7 @@ public class ParserImplTest {
         String format = getSupportedFormat();
 
 
-        String configFile = "regex=" + REGEX + '\n' +
-                "token.count=" + tokenCount + '\n'
+        String configFile = "token.count=" + tokenCount + '\n' + "regex=" + REGEX + '\n'
                 + "token[0].name=" + names.get("Process") + '\n'
                 + "token[1].name=" + names.get("ProcessID") + '\n'
                 + "token[2].name=" + names.get("ClientHost") + '\n'

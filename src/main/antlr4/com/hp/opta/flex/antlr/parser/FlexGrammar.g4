@@ -3,6 +3,7 @@ grammar FlexGrammar;
 
 @header {
 import com.hp.opta.flex.antlr.parser.impl.ParserImpl;
+import com.hp.opta.flex.antlr.utils.ParserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.hp.opta.flex.configuration.model.*;
@@ -19,7 +20,7 @@ import java.lang.Integer;
 
   private List<TokenMetaData> finalLdbExpression = null;
 
-  private ConfigurationMetaData configMetaData = new ConfigurationMetaData();
+  private ConfigurationMetaData configMetaData = null;
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -31,12 +32,6 @@ import java.lang.Integer;
     lexerErrorPosition = pos;
     lexerErrorText = text;
   }
-
-
-  public String getAnyString(String text){
-    return (text == null || text.isEmpty())? text:text.substring(1, text.length()-1);
-  }
-
 }
 
 /**
@@ -53,14 +48,17 @@ parseConfigFile returns [ConfigurationMetaData parseResponse]
 
 
 configMetaDataExpression :
+
+TOKEN_COUNT tokenCount = ANY_TEXT {
+        String tokenCountResult = ParserUtils.getAnyString($tokenCount.text);
+        int tokenCountResultAsInt = Integer.parseInt(tokenCountResult);
+        configMetaData = ParserUtils.createConfigurationMetaDataIfNull(configMetaData, tokenCountResultAsInt);
+}
+
 REGEX regex=ANY_TEXT {
-        String regexResult = getAnyString($regex.text);
+        String regexResult = ParserUtils.getAnyString($regex.text);
         configMetaData.setParseString(regexResult);
         configMetaData.setParsingMethod(ParsingMethod.REGEX);
-}
-TOKEN_COUNT tokenCount = ANY_TEXT {
-        String tokenCountResult = getAnyString($tokenCount.text);
-        configMetaData.setTokenCount(Integer.parseInt(tokenCountResult));
 }
  addAllTokens
 ;
