@@ -66,7 +66,7 @@ public class ParserImplTest {
         Assert.assertTrue(NAME.equals(token.getName()));
     }
 
-    //@Test(expected = FlexEngineParseException.class)
+    @Test(expected = FlexEngineParseException.class)
     public void testCheckNameIsWithIllegalCaracters() {
         String input = "regex=" + REGEX + '\n' +
                 "token.count=1\n" +
@@ -82,18 +82,17 @@ public class ParserImplTest {
     }
 
 
-  /*  @Test
+    @Test
     public void testCheckTypeIsTimeStampAndCorrectFormatIsGiven() {
 
         String format = getSupportedFormat();
-
-        String configFile = "regex=scaninboundpass()outboundsmtp\n" +
+        String configFile = "regex=" + REGEX + '\n' +
                 "token.count=1\n" +
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.TimeStamp.name() + "\n" +
-                "token[0].format=" + format;
+                "token[0].format=" + format + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
-    }*/
+    }
 
     @Test(expected = FlexEngineParseException.class)
     public void testCheckTypeIsTimeStampAndIncorrectFormatIsGiven() {
