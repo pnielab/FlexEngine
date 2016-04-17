@@ -31,6 +31,12 @@ import java.lang.Integer;
     lexerErrorPosition = pos;
     lexerErrorText = text;
   }
+
+
+  public String getAnyString(String text){
+    return (text == null || text.isEmpty())? text:text.substring(1, text.length()-1);
+  }
+
 }
 
 /**
@@ -52,59 +58,56 @@ parseConfigFile returns [ConfigurationMetaData parseResponse]
 ;
 
 
+
 configMetaDataExpression :
- regex = regexExpression  {configMetaData.setParseString($regex.expression);configMetaData.setParsingMethod(ParsingMethod.REGEX);}
- tokenCount = tokenCountExpression {configMetaData.setTokenCount($tokenCount.expression);}
+REGEX regex=ANY_TEXT {
+        String regexResult = getAnyString($regex.text);
+        configMetaData.setParseString(regexResult);
+        configMetaData.setParsingMethod(ParsingMethod.REGEX);
+}
+TOKEN_COUNT tokenCount = ANY_TEXT {
+        String tokenCountResult = getAnyString($tokenCount.text);
+        configMetaData.setTokenCount(Integer.parseInt(tokenCountResult));
+}
  tokens= predicate {configMetaData.setTokens($tokens.tokenObj);}
-/*    | tokenCountExpression  {$expression = $tokenCountExpression.expression; parseResponse.setTokenCount($expression);}
- | tokenExpression         {$expression = $tokenExpression.expression; parseResponse.setTokens($expression);}*/
 ;
 
 
-regexExpression returns [String expression] :
- 'regex=' regex=.*
- {$expression = $regex.text;}
-;
 
-tokenCountExpression returns [Integer expression] :
- 'token.count=' count=NUMBER
- {$expression = Integer.parseInt($count.text);}
-;
+
+
 
 /**
  * Tokens
  */
 
 
-NOT             : 'NOT';
-ISNULL          : 'ISNULL';
-AND             : 'AND';
-OR              : 'OR';
-IN              : 'IN';
-IS              : 'IS';
-NULL            : 'NULL';
-PIPE            : '|';
-LEFT_PARENTHESIS: '(';
-RIGHT_PARENTHESIS: ')';
-ASTERISK        : '*';
-LEFT_BRACKET    : '[';
-RIGHT_BRACKET   : ']';
-HYPHEN          : '-';
-
-
+/*
 WS              : [ \r\t\n]+ -> channel(WHITESPACE);
+REGEX           : 'regex';
+TOKEN_COUNT     : 'token.count';
+// need to talk about the number as a token
 NUMBER          : ('0'..'9')+ '.' ('0'..'9')+  | ('0'..'9')+;
-TOKEN_TYPE      : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
-STRING          : '\"' (ESCAPE_SEQUENCE | ~('"'))* '\"';
-ID              : [a-zA-Z$] [a-zA-Z0-9_]*;
+TOKEN_NAME      : 'token[' index1=NUMBER '].name';
+TOKEN_TYPE      : 'token[' index2=NUMBER '].type';
+TOKEN_FORMAT    : 'token[' index3=NUMBER '].format';
+ANY_TEXT        : '=' ~([ \r\t\n])+ '\n';*/
 
-//The name can be in the following format: message_time (all low case, _ between words, no spaces), name_11:00:00
-NAME_FORMAT     : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
-LITERAL         : ~(' ' | '"' | ',' | '(' | ')' | '{' | '}' | '$' | '[' | ']' | '=' | '>' | '<' | '\n' | '\t' | '\r' | ':' | ';' | '|' | '-' | '+' | '/' | '%' | '^'| '*')+;
-ELLIPSES        : '...';
-ESCAPE_SEQUENCE : '\\' '\"' { setText("\""); };
-RELOPERATOR     : ('<' | '<=' | '=' | '>' | '>='); //what about <>?
-FALL_THROUGH    :  .  { reportLexerError( getCharPositionInLine(), getText()); }; // Everything else is wrong, need to be catched here
+
+WS                  : [ \r\t\n]+ -> channel(WHITESPACE);
+NUMBER              : ('0'..'9')+;
+REGEX               : 'regex';
+TOKEN_COUNT         : 'token.count';
+TOKEN_START         : 'token[';
+TOKEN_NAME          : '].name';
+TOKEN_TYPE          : '].type';
+TOKEN_FORMAT        : '].format';
+//ID                  : [a-zA-Z0-9_]+;
+//NAME_FORMAT         : ([a-z]*)'_'([0-2][0-4]':'[0-5][0-9]':'[0-5][0-9]);
+//TYPE_FORMAT      : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
+//DATE_FORMAT         : [,yMdHmsSTZ:'/null ]+;
+ANY_TEXT            : '=' ~([ \r\t\n])+ '\n';
+
 
 
 /**
@@ -118,17 +121,18 @@ ldbExpression:
 
 predicate returns [List<TokenMetaData> tokenObj] :
     tokensList {$tokenObj=$tokensList.flexTokens;}
-//    token {$tokenObj=$token.tokenObj;}
 ;
 
 
 token returns [TokenMetaData tokenObj] :
-//  token[3].name=MessageTime
-//  token[3].type=TimeStamp
-//  token[3].format=yyyy-MM-dd HH\:mm\:ss.sss
-    'token[' index1=NUMBER '].name=' name=NAME_FORMAT
-    ('token[' index2=NUMBER '].type=' type=TOKEN_TYPE)?
-    ('token[' index3=NUMBER '].format=' format=ID)? {$tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
+    TOKEN_START index1=NUMBER TOKEN_NAME name=ANY_TEXT
+    (TOKEN_START index2=NUMBER TOKEN_TYPE type=ANY_TEXT)?
+    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=ANY_TEXT)?
+  {
+  String nameResult = getAnyString($name.text);
+  String typeResult = getAnyString($type.text);
+  String formatResult = getAnyString($format.text);
+  $tokenObj = MetaDataFactory.createTokenMetaData(nameResult, typeResult, formatResult, $index1.text, $index2.text, $index3.text);}
 ;
 
 tokensList returns [List<TokenMetaData> flexTokens]
@@ -137,57 +141,3 @@ tokensList returns [List<TokenMetaData> flexTokens]
   }:
   a=token {$flexTokens.add($a.tokenObj); } ( b=token {$flexTokens.add($b.tokenObj);})*
 ;
-
-//rexCommand returns [LdbExpression expression] :
-//  // rex[Y, ".*?\s(\d+).*"]
-//  ldb='rex' LEFT_BRACKET sourceProp=property ',' term RIGHT_BRACKET                                             {$expression = new RexCommand($sourceProp.propery, $term.pattern); }
-//  | ldb='rex' LEFT_BRACKET LEFT_PARENTHESIS sourceExpression=predicate RIGHT_PARENTHESIS ',' term RIGHT_BRACKET {$expression = new RexCommand($sourceExpression.expression, $term.pattern); }
-//;
-//
-//property returns [SingleValueExpression propery]:
-//  term { $propery = new SingleValueExpression($term.pattern);}
-//;
-//
-//concatCommand returns [LdbExpression expression]:
-//    lp=concatCommand  ',' rp=concatCommand      {$expression = new ConcatExpression($lp.expression, $rp.expression);}
-//    |  noneConcatCommands                       {$expression = $noneConcatCommands.expression;}
-//;
-//
-//noneConcatCommands returns [LdbExpression expression] :
-//    LEFT_PARENTHESIS rexCommand RIGHT_PARENTHESIS               {$expression = $rexCommand.expression;}
-//    | property                                                  {$expression = $property.propery;}
-//    | LEFT_PARENTHESIS arithmeticExpression RIGHT_PARENTHESIS   {$expression = $arithmeticExpression.expression;}
-//;
-//
-//noneArithmeticCommands returns [LdbExpression expression] :
-//   LEFT_PARENTHESIS rexCommand RIGHT_PARENTHESIS        {$expression = $rexCommand.expression;}
-//    | property                                          {$expression = $property.propery;}
-//    | LEFT_PARENTHESIS concatCommand RIGHT_PARENTHESIS  {$expression = $concatCommand.expression;}
-//;
-//
-//
-//
-//arithmeticExpression returns [LdbExpression expression] :
-//  HYPHEN a=arithmeticExpression                                 { $expression = new NegativeArithmetic(new SingleValueExpression(new ParserPattern("0")), "-", $a.expression); }
-//  | LEFT_PARENTHESIS a=arithmeticExpression RIGHT_PARENTHESIS   { $expression = new ParenthesisArithmetic(((ArithmeticExpression)$a.expression).getLeft(),((ArithmeticExpression)$a.expression).getOperator().getString(),((ArithmeticExpression)$a.expression).getRight()); }
-//  | la=arithmeticExpression '*' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "*", $ra.expression); }
-//  | la=arithmeticExpression '%' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "%", $ra.expression); }
-//  | la=arithmeticExpression '^' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "^", $ra.expression); }
-//  | la=arithmeticExpression '/' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "/", $ra.expression); }
-//  | la=arithmeticExpression '+' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "+", $ra.expression); }
-//  | la=arithmeticExpression '-' ra=arithmeticExpression         { $expression = new ArithmeticExpression($la.expression, "-", $ra.expression); }
-//  | noneArithmeticCommands                                      { $expression = $noneArithmeticCommands.expression; }
-//;
-
-//numberExpression returns [ParserPattern pattern] :
-//  NUMBER  { $pattern = new ParserPattern($NUMBER.text, false); }
-//  | ID      { $pattern = new ParserPattern($ID.text); }
-//;
-//
-//
-//term returns [ParserPattern pattern] :
-//  STRING     {$pattern = new ParserPattern(SingleValueExpression.processStringToken($STRING.text), true); }
-//  | NUMBER   {$pattern = new ParserPattern($NUMBER.text, false); }
-//  | ID       {$pattern = new ParserPattern($ID.text); }
-//  | LITERAL  {$pattern = new ParserPattern($LITERAL.text); }
-//;
