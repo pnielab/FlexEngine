@@ -12,12 +12,6 @@ public class LeafNode<T> implements Node<T> {
 	
 	/**
 	 * Instantiates a new leaf node.
-	 */
-	public LeafNode() {
-	}
-	
-	/**
-	 * Instantiates a new leaf node.
 	 *
 	 * @param value the value
 	 */
@@ -33,14 +27,6 @@ public class LeafNode<T> implements Node<T> {
 		return getValue();
 	}	
 
-	/**
-	 * Sets the value.
-	 *
-	 * @param value the new value
-	 */
-	public void setValue(T value) {
-		this.value = value;
-	}
 	
 	/**
 	 * Gets the value.

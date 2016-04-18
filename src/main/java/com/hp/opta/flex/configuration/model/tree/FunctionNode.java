@@ -20,9 +20,9 @@ public class FunctionNode<T> implements Node<Object> {
 	/**
 	 * Instantiates a new function node.
 	 */
-	public FunctionNode() {
-		function = null;
-		parameters = new LinkedList<>();
+	public FunctionNode(Function<List<T>, T> function) {
+		this.function = function;
+		this.parameters = new LinkedList<>();
 	}
 	
 	/**
@@ -58,31 +58,14 @@ public class FunctionNode<T> implements Node<Object> {
 		return function;
 	}
 
-	/**
-	 * Sets the function.
-	 *
-	 * @param function the function
-	 */
-	public void setFunction(Function<List<T>, T> function) {
-		this.function = function;
-	}
 
 	/**
 	 * Gets the parameters.
 	 *
 	 * @return the parameters
 	 */
-	public List<Node<T>> getParameters() {
+	public Iterable<Node<T>> getParameters() {
 		return parameters;
-	}
-
-	/**
-	 * Sets the parameters.
-	 *
-	 * @param parameters the new parameters
-	 */
-	public void setParameters(List<Node<T>> parameters) {
-		this.parameters = parameters;
 	}
 	
 	
@@ -91,7 +74,7 @@ public class FunctionNode<T> implements Node<Object> {
 	 *
 	 * @param parameter the parameter
 	 */
-	public void addParameters(Node<T> parameter) {
+	public void addParameter(Node<T> parameter) {
 		if(this.parameters == null){
 			this.parameters = new LinkedList<>();
 		}
