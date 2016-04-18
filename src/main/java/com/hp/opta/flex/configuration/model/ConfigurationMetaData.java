@@ -35,6 +35,15 @@ public class ConfigurationMetaData implements Serializable{
     /**The event parse root.*/
     private Map<String, Node<? extends Object>> eventMappings;
 
+    
+    /**
+     * Instantiates a new configuration meta data.
+     *
+     * @param tokenCount the token count
+     */
+    public ConfigurationMetaData() {
+        this(0);
+    }
 
     /**
      * Instantiates a new configuration meta data.
@@ -45,8 +54,8 @@ public class ConfigurationMetaData implements Serializable{
         tokens = new ArrayList<>(tokenCount);
         eventMappings = new HashMap<>();
     }
-
-
+    
+    
     /**
      * Gets the parsing method.
      *
@@ -80,7 +89,6 @@ public class ConfigurationMetaData implements Serializable{
      * @param parseString the new parses the string
      */
     public void setParseString(String parseString) {
-
         this.parseString = parseString;
     }
 
@@ -95,10 +103,14 @@ public class ConfigurationMetaData implements Serializable{
 
     /**
      * Sets the token count.
-     *
+     * This function resets the internal list of tokens.
+     * If you have any 
      * @param tokenCount the new token count
      */
     public void setTokenCount(int tokenCount) {
+    	if((tokens != null) && (!tokens.isEmpty())){
+    		throw new InstantiationError("Cannot change tokens list once it has been used");
+    	}
     	tokens = new ArrayList<>(tokenCount);
     }
 
