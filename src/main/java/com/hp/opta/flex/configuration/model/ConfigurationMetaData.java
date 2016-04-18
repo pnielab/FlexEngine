@@ -23,9 +23,6 @@ public class ConfigurationMetaData implements Serializable{
 	/** serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 
-    /** The Constant comparator. */
-    private static final TokenMetaDataIndexComparator comparator = new TokenMetaDataIndexComparator();
-
     /** The parsing method. */
     private ParsingMethod parsingMethod;
 
@@ -41,15 +38,6 @@ public class ConfigurationMetaData implements Serializable{
 
     /**
      * Instantiates a new configuration meta data.
-     */
-    public ConfigurationMetaData() {
-        tokens = new ArrayList<>();
-        eventMappings = new HashMap<>();
-    }
-
-
-    /**
-     * Instantiates a new configuration meta data.
      *
      * @param tokenCount the token count
      */
@@ -57,7 +45,6 @@ public class ConfigurationMetaData implements Serializable{
         tokens = new ArrayList<>(tokenCount);
         eventMappings = new HashMap<>();
     }
-
 
 
     /**
@@ -133,7 +120,6 @@ public class ConfigurationMetaData implements Serializable{
      */
     public void addToken(TokenMetaData token) {
         this.tokens.add(token);
-        this.tokens.sort(comparator);
     }
 
 

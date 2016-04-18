@@ -20,7 +20,7 @@ public class ConfigurationMetaDataTest {
 
 	@Test
 	public void testBasic() {
-		ConfigurationMetaData c = new ConfigurationMetaData();
+		ConfigurationMetaData c = new ConfigurationMetaData(0);
 		
 		c.setParseString("New String");
 		assertEquals("New String", c.getParseString());
@@ -29,7 +29,7 @@ public class ConfigurationMetaDataTest {
 	
 	@Test
 	public void testAddRemove() {
-		ConfigurationMetaData c = new ConfigurationMetaData();
+		ConfigurationMetaData c = new ConfigurationMetaData(5);
 		
 		for(int i = 5; i > 0; i--){
 			TokenMetaData t = new TokenMetaData("",TokenType.Integer,"",i);

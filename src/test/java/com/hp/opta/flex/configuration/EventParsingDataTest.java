@@ -29,7 +29,7 @@ public class EventParsingDataTest {
 	@Test
 	public void testBasic1() {
 
-		ConfigurationMetaData conf = new ConfigurationMetaData();
+		ConfigurationMetaData conf = new ConfigurationMetaData(0);
 		EventParsingData epd = new EventParsingData(conf);
 		
 		exception.expect(IllegalStateException.class);
@@ -41,7 +41,7 @@ public class EventParsingDataTest {
 	@Test
 	public void testBasic2() {
 
-		ConfigurationMetaData conf = new ConfigurationMetaData();
+		ConfigurationMetaData conf = new ConfigurationMetaData(0);
 		conf.setParseString(".*");
 		
 		EventParsingData epd = new EventParsingData(conf);
@@ -57,7 +57,7 @@ public class EventParsingDataTest {
 	@Test
 	public void testBasic3() {
 
-		ConfigurationMetaData conf = new ConfigurationMetaData();
+		ConfigurationMetaData conf = new ConfigurationMetaData(0);
 		conf.setParseString(".*");
 		conf.setParsingMethod(ParsingMethod.REGEX);
 		EventParsingData epd = new EventParsingData(conf);

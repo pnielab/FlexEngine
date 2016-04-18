@@ -36,7 +36,7 @@ public class MainFlowTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		conf = new ConfigurationMetaData();
+		conf = new ConfigurationMetaData(DATA_SIZE);
 		List<TokenMetaData> tokensList = createTokenMetaDataList(DATA_SIZE);
 		conf.setTokenCount(tokensList.size());
 		tokensList.forEach((tmd) -> conf.addToken(tmd));

@@ -22,11 +22,11 @@ public class DefaultEventParserTest {
 	public void testBasic() {
 		DefaultEventParser<String,String> p = new DefaultEventParser<>();
 		
-		p.setParsingData(new EventParsingData(new ConfigurationMetaData()));
+		p.setParsingData(new EventParsingData(new ConfigurationMetaData(0)));
 		
 		Assert.assertNotNull(p.getParsingData());
 		
-		p = new DefaultEventParser<>(new EventParsingData(new ConfigurationMetaData()));
+		p = new DefaultEventParser<>(new EventParsingData(new ConfigurationMetaData(0)));
 		
 		Assert.assertNotNull(p.getParsingData());
 
