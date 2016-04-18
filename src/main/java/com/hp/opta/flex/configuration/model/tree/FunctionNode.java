@@ -75,9 +75,6 @@ public class FunctionNode<T> implements Node<Object> {
 	 * @param parameter the parameter
 	 */
 	public void addParameter(Node<T> parameter) {
-		if(this.parameters == null){
-			this.parameters = new LinkedList<>();
-		}
 		this.parameters.add(parameter);
 	}
 	

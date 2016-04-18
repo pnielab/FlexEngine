@@ -18,8 +18,7 @@ public class LeafNodeTest {
 
 	@Test
 	public void testBasic() {
-		LeafNode ln = new LeafNode<>();
-		ln.setValue("The new Value");
+		LeafNode ln = new LeafNode<>("The new Value");
 		
 		assertEquals("The new Value", ln.getValue());
 		assertEquals("The new Value", ln.computeValue());

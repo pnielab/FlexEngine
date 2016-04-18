@@ -3,6 +3,7 @@ package com.hp.opta.flex.configuration.model.tree;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.function.Function;
 
 import org.junit.After;
@@ -22,7 +23,7 @@ public class FunctionNodeTest {
 	
 	@Test
 	public void testBasic() {
-		FunctionNode<Object> test = new FunctionNode<>();
+		FunctionNode<Object> test = new FunctionNode<>(null);
 		Assert.assertNotNull(test);
 		Assert.assertNotNull(test.getParameters());
 		
@@ -36,7 +37,7 @@ public class FunctionNodeTest {
 		
 		List<Node<Object>> l = new LinkedList<>();
 		for(int i =0; i < 5; i++){
-			Node<Object> node = new LeafNode();
+			Node<Object> node = new LeafNode(null);
 			l.add(node);
 		}
 		
@@ -44,14 +45,17 @@ public class FunctionNodeTest {
 		Assert.assertNotNull(test);
 		Assert.assertNotNull(test.getParameters());
 		Assert.assertNotNull(test.getFunction());
-		Assert.assertEquals(5, test.getParameters().size());
+		
+		final LongAdder adr = new LongAdder();
+		test.getParameters().forEach((n) -> adr.increment());
+		
+		Assert.assertEquals(5, adr.sum());
 	}	
 	
 
 	@Test
 	public void testSetFunction() {
-		FunctionNode<Object> test = new FunctionNode<>();
-		test.setFunction(new Function<List<Object>, Object>() {
+		FunctionNode<Object> test = new FunctionNode<>(new Function<List<Object>, Object>() {
 			@Override
 			public Object apply(List<Object> t) {
 				return t.size();
@@ -65,39 +69,23 @@ public class FunctionNodeTest {
 	
 	
 	@Test
-	public void testSetParameter() {
-		FunctionNode<Object> test = new FunctionNode<>();
-		
-		List<Node<Object>> parametersList = new LinkedList<>();
-		for(int i =0; i < 5; i++){
-			Node<Object> node = new LeafNode();
-			parametersList.add(node);
-		}
-		
-		test.setParameters(parametersList);
-		Assert.assertNotNull(test.getParameters());
-		Assert.assertEquals(5, test.getParameters().size());
-	}	
-	
-	
-	@Test
 	public void testAddParameter() {
-		FunctionNode<Object> test = new FunctionNode<>();
+		FunctionNode<Object> test = new FunctionNode<>(null);
 		
 		for(int i =0; i < 5; i++){
-			Node<Object> node = new LeafNode();
-			test.addParameters(node);
+			Node<Object> node = new LeafNode(i);
+			test.addParameter(node);
 		}
 		
 		Assert.assertNotNull(test.getParameters());
-		Assert.assertEquals(5, test.getParameters().size());
+		final LongAdder adr = new LongAdder();
+		test.getParameters().forEach((n) -> adr.increment());
+		Assert.assertEquals(5, adr.sum());
 	}	
 	
 	@Test
 	public void testCompute() {
-		FunctionNode<Object> test = new FunctionNode<>();
-		
-		test.setFunction(new Function<List<Object>, Object>() {
+		FunctionNode<Object> test = new FunctionNode<>(new Function<List<Object>, Object>() {
 			@Override
 			public Object apply(List<Object> t) {
 				StringBuilder strBuilder = new StringBuilder();
@@ -108,9 +96,10 @@ public class FunctionNodeTest {
 			}
 		});
 		
+		
 		for(int i =0; i < 5; i++){
 			Node<Object> node = new LeafNode(i);
-			test.addParameters(node);
+			test.addParameter(node);
 		}
 		
 		System.out.println(test.computeValue());
