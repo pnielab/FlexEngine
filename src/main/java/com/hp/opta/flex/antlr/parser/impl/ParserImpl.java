@@ -6,6 +6,7 @@ import com.hp.opta.flex.antlr.parser.CustomParser;
 import com.hp.opta.flex.antlr.parser.FlexGrammarLexer;
 import com.hp.opta.flex.antlr.parser.FlexGrammarParser;
 import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
+import com.hp.opta.flex.configuration.model.ParsingMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,6 +25,8 @@ public class ParserImpl implements CustomParser {
 
     @Override
     public ConfigurationMetaData parse(String configFile) {
+        //TODO: change signature to get ParsingMethod.REGEX
+        ParsingMethod parsingMethod = ParsingMethod.REGEX;
         FlexGrammarParser parser = null;
         if (!StringUtils.isEmpty(configFile)) {
             try {
@@ -35,7 +38,7 @@ public class ParserImpl implements CustomParser {
                 ErrorListener errorListener = new ErrorListener();
                 parser.addErrorListener(errorListener);
                 ConfigurationMetaData configMetaData = resolve(parser);
-                validate(configMetaData);
+                configMetaData.setParsingMethod(parsingMethod);
                 return configMetaData;
             } catch (IllegalArgumentException | FlexEngineParseException e) {
                 throw e;
@@ -48,14 +51,6 @@ public class ParserImpl implements CustomParser {
             throw new IllegalArgumentException("config file is null or empty");
         }
 
-    }
-
-
-    private void validate(ConfigurationMetaData configMetaData) {
-/*        if (configMetaData.getTokenCount() != configMetaData.getTokens().size()) {
-            throw new IllegalArgumentException("token count mismatch to number of tokens");
-        }*/
-    	return;
     }
 
     private ConfigurationMetaData resolve(FlexGrammarParser parser) {

@@ -46,7 +46,7 @@ public class DefaultEventParser<T extends Object, R extends Object> implements E
 		
 		Iterable<TokenMetaData> tokens = parsingData.getConfigurationMetaData().getTokens();
 		
-		Map<String, String> map = new HashMap<>(parsingData.getConfigurationMetaData().getTokenCount(), 1f);
+		Map<String, String> map = new HashMap<>(parsingData.getConfigurationMetaData().getNumberOfTokens(), 1f);
 		
 		tokens.forEach((tmd) -> map.put(tmd.getName(), matcher.group(tmd.getIndex())));
 		
