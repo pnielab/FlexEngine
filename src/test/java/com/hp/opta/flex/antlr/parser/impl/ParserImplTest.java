@@ -166,7 +166,8 @@ public class ParserImplTest {
 
         for (TokenMetaData token : configMetaData.getTokens()) {
             Assert.assertNotNull(names.get(token.getName()));
-            Assert.assertNull(token.getType());
+            // default value is String
+            Assert.assertEquals(token.getType(), TokenType.String);
             Assert.assertNull(token.getFormat());
         }
     }
