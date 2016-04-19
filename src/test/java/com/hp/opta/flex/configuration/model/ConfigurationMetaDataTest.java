@@ -3,10 +3,14 @@ package com.hp.opta.flex.configuration.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.concurrent.atomic.LongAdder;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.hp.opta.flex.configuration.model.tree.LeafNode;
 
 public class ConfigurationMetaDataTest {
 
@@ -46,5 +50,31 @@ public class ConfigurationMetaDataTest {
 		}
 		
 	}
+	
+	@Test
+	public void testEventMappins() {
+		ConfigurationMetaData c = new ConfigurationMetaData(5);
+
+		c.addEventMapping("first", new LeafNode<Object>("LeafNode"));
+		
+		Assert.assertNotNull(c.getEventMappings());
+		
+		final LongAdder la = new LongAdder();
+		c.getEventMappings().forEach((e)-> la.increment());
+		
+		Assert.assertEquals(la.sum(),1);
+		
+		c.removeEventMapping("first");
+		
+		la.reset();
+		c.getEventMappings().forEach((e)-> la.increment());
+		
+		Assert.assertEquals(0, la.sum());
+		
+	}
+	
+	
+		
+	
 	
 }

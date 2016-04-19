@@ -85,10 +85,10 @@ public class Main {
             
             
             
-        } catch( CmdLineException e ) {
+        } catch(CmdLineException exception) {
             // if there's a problem in the command line,you'll get this exception. 
         	// this will report an error message.
-            System.err.println(e.getMessage());
+            System.err.println(exception.getMessage());
             System.err.println("java -jar FlexEngine-XYZ.jar [options...] arguments...");
             // print the list of available options
             parser.printUsage(System.err);
