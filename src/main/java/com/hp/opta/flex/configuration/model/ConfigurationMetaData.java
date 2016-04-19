@@ -1,13 +1,13 @@
 package com.hp.opta.flex.configuration.model;
 
+import com.hp.opta.flex.configuration.model.tree.Node;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.hp.opta.flex.configuration.model.tree.Node;
 
 
 /**
@@ -16,34 +16,36 @@ import com.hp.opta.flex.configuration.model.tree.Node;
  * @author yoavn
  * @since Apr 17, 2016
  */
-public class ConfigurationMetaData implements Serializable{
+public class ConfigurationMetaData implements Serializable {
 
 
+    /**
+     * serialVersionUID.
+     */
+    private static final long serialVersionUID = 1L;
 
-	/** serialVersionUID. */
-	private static final long serialVersionUID = 1L;
-
-    /** The parsing method. */
+    /**
+     * The parsing method.
+     */
     private ParsingMethod parsingMethod;
 
-    /** The parse string.*/
+    /**
+     * The parse string.
+     */
     private String parseString;
 
-    /**The tokens.*/
+    /**
+     * The tokens.
+     */
     private List<TokenMetaData> tokens;
 
-    /**The event parse root.*/
+    /**
+     * The event parse root.
+     */
     private Map<String, Node<? extends Object>> eventMappings;
 
-    
-    /**
-     * Instantiates a new configuration meta data.
-     *
-     * @param tokenCount the token count
-     */
-    public ConfigurationMetaData() {
-        this(0);
-    }
+
+    private int tokenCount;
 
     /**
      * Instantiates a new configuration meta data.
@@ -51,11 +53,12 @@ public class ConfigurationMetaData implements Serializable{
      * @param tokenCount the token count
      */
     public ConfigurationMetaData(int tokenCount) {
-        tokens = new ArrayList<>(tokenCount);
+        this.tokenCount = tokenCount;
+        tokens = new ArrayList<>(this.tokenCount);
         eventMappings = new HashMap<>();
     }
-    
-    
+
+
     /**
      * Gets the parsing method.
      *
@@ -98,22 +101,13 @@ public class ConfigurationMetaData implements Serializable{
      * @return the token count
      */
     public int getTokenCount() {
+        return tokenCount;
+    }
+
+
+    public int getNumberOfTokens() {
         return tokens.size();
     }
-
-    /**
-     * Sets the token count.
-     * This function resets the internal list of tokens.
-     * If you have any 
-     * @param tokenCount the new token count
-     */
-    public void setTokenCount(int tokenCount) {
-    	if((tokens != null) && (!tokens.isEmpty())){
-    		throw new InstantiationError("Cannot change tokens list once it has been used");
-    	}
-    	tokens = new ArrayList<>(tokenCount);
-    }
-
 
     /**
      * Gets the tokens iterator.
@@ -141,7 +135,7 @@ public class ConfigurationMetaData implements Serializable{
      * @return the event mappings
      */
     public Iterable<Entry<String, Node<? extends Object>>> getEventMappings() {
-    	return eventMappings.entrySet();
+        return eventMappings.entrySet();
     }
 
 

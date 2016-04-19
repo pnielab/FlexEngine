@@ -37,7 +37,7 @@ public class ConfigurationMetaDataTest {
 		}
 		
 		assertNotNull(c.getTokens());
-		Assert.assertTrue(c.getTokenCount() == 5);
+		Assert.assertTrue(c.getNumberOfTokens() == 5);
 		
 		StringBuilder resultAfterSet = new StringBuilder();
 		

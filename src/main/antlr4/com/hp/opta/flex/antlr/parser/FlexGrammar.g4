@@ -18,9 +18,10 @@ import java.lang.Integer;
 
   public static final int WHITESPACE = 2;
 
-  private List<TokenMetaData> finalLdbExpression = null;
-
   private ConfigurationMetaData configMetaData = null;
+
+
+  private String parsingString;
 
   public String lexerErrorText = "";
   public int lexerErrorPosition = -1;
@@ -48,17 +49,16 @@ parseConfigFile returns [ConfigurationMetaData parseResponse]
 
 
 configMetaDataExpression :
-
+REGEX parseString=ANY_TEXT {
+        // saving regex to be later set when recivin token count.
+        parsingString = ParserUtils.getAnyString($parseString.text);
+        }
 TOKEN_COUNT tokenCount = ANY_TEXT {
         String tokenCountResult = ParserUtils.getAnyString($tokenCount.text);
         int tokenCountResultAsInt = Integer.parseInt(tokenCountResult);
         configMetaData = ParserUtils.createConfigurationMetaDataIfNull(configMetaData, tokenCountResultAsInt);
-}
-
-REGEX regex=ANY_TEXT {
-        String regexResult = ParserUtils.getAnyString($regex.text);
-        configMetaData.setParseString(regexResult);
-        configMetaData.setParsingMethod(ParsingMethod.REGEX);
+        // adding the regex expretion that was previously set
+        configMetaData.setParseString(parsingString);
 }
  addAllTokens
 ;
@@ -71,7 +71,7 @@ token returns [TokenMetaData tokenObj] :
 
   {
   String formatResult = ParserUtils.getAnyString($format.text);
-  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, formatResult, $index1.text, $index2.text, $index3.text);}
+  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, formatResult, $index1.text, $index2.text, $index3.text, configMetaData);}
 ;
 
 
