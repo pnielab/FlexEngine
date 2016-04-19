@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * A factory for creating MetaData objects.
@@ -52,7 +51,8 @@ public class MetaDataFactory {
             throw new FlexEngineParseException("index do not match when trying to parse token with name: " + name);
         }
 
-        TokenType tokenType = (type == null) ? null : TokenType.valueOf(type);
+        //default value of type is String
+        TokenType tokenType = (type == null) ? TokenType.String : TokenType.valueOf(type);
         if (TokenType.TimeStamp.equals(tokenType) && dateFormats.get(format) == null) {
             logger.error("unsupported date format: {}, should be one of the given format: {}", format, dateFormats);
             throw new FlexEngineParseException("unsupported date format: " + format);

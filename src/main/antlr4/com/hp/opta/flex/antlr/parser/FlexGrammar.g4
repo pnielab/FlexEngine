@@ -67,10 +67,11 @@ token returns [TokenMetaData tokenObj] :
 
    TOKEN_START index1=NUMBER TOKEN_NAME name=ID
     (TOKEN_START index2=NUMBER TOKEN_TYPE type=TYPE_FORMAT)?
-    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=DATE_FORMAT)?
+    (TOKEN_START index3=NUMBER TOKEN_FORMAT format=ANY_TEXT)?
 
   {
-  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, $format.text, $index1.text, $index2.text, $index3.text);}
+  String formatResult = ParserUtils.getAnyString($format.text);
+  $tokenObj = MetaDataFactory.createTokenMetaData($name.text, $type.text, formatResult, $index1.text, $index2.text, $index3.text);}
 ;
 
 
@@ -89,7 +90,7 @@ TOKEN_COUNT         : 'token.count';
 TOKEN_START         : 'token[';
 TOKEN_NAME          : '].name=';
 TOKEN_TYPE          : '].type=';
-TOKEN_FORMAT        : '].format=';
+TOKEN_FORMAT        : '].format';
 TYPE_FORMAT         : 'String' | 'Long' |'Integer'| 'TimeStamp'| 'Boolean'| 'Double';
 ID                  : [a-zA-Z0-9_]+;
 DATE_FORMAT         : [,yMdHmsSTZ:'/null ]+;
