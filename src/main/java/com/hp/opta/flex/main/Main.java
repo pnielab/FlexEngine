@@ -64,16 +64,18 @@ public class Main {
             // parse the arguments.
             parser.parseArgument(args);
             
+            System.out.println("Reading Configuration");
             ConfigurationMetaData metaData = new ParserImpl().parse(conf);
-            
             EventParsingData data = EventParsingDataHolder.publish("main", metaData);
-            
             ParsingExcecutioner.publish("main", data);
-            
+
+            System.out.println("Reading Input");
             String line = this.readInputLine(this.in);
             
+            System.out.println("Executing Parsing");
             Object result = ParsingExcecutioner.parse("main", line);
 
+            System.out.println("Writing Output");
             writeOutputLine(result, out);
             
             System.out.println("done.");
