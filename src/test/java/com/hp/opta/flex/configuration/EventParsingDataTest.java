@@ -1,6 +1,7 @@
 package com.hp.opta.flex.configuration;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -63,6 +64,26 @@ public class EventParsingDataTest {
 		EventParsingData epd = new EventParsingData(conf);
 		
 		epd.initialize();
+		
+	}
+	
+	
+	@Test
+	public void testBasic4() {
+
+		EventParsingData epd = new EventParsingData(new ConfigurationMetaData(0));
+		Assert.assertNotNull(epd.getConfigurationMetaData());
+		
+		epd.setParsePattern(Pattern.compile(""));
+		
+		Assert.assertNotNull(epd.getParsePattern());
+		
+		epd.setConfigurationMetaData(null);
+		Assert.assertNull(epd.getConfigurationMetaData());
+		
+		epd.setConfigurationMetaData(new ConfigurationMetaData(0));
+		Assert.assertNotNull(epd.getConfigurationMetaData());
+		
 		
 	}	
 
