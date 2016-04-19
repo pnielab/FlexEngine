@@ -120,6 +120,16 @@ public class ParserImplTest {
         ConfigurationMetaData configMetaData = parser.parse(configFile);
     }
 
+    @Test
+    public void testMultiLineBreaks() {
+        String configFile = "regex=" + REGEX + '\n' + '\n'+
+                "token.count=1\n" + '\n'+
+                "token[0].name=" + NAME + "\n" + '\n'+
+                "token[0].type=" + "String" + '\n'+ '\n';
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+        configMetaData = null;
+    }
+
 
 /*    @Test
     public void testSpaceAfterTokens() {
