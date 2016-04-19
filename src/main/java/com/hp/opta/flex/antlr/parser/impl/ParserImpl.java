@@ -5,6 +5,7 @@ import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
 import com.hp.opta.flex.antlr.parser.CustomParser;
 import com.hp.opta.flex.antlr.parser.FlexGrammarLexer;
 import com.hp.opta.flex.antlr.parser.FlexGrammarParser;
+import com.hp.opta.flex.antlr.parser.Validator;
 import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
 import com.hp.opta.flex.configuration.model.ParsingMethod;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -23,6 +24,7 @@ public class ParserImpl implements CustomParser {
 
     private static final Logger logger = LoggerFactory.getLogger(ParserImpl.class);
 
+    private static Validator validator = ValidatorImpl.getInstance();
     @Override
     public ConfigurationMetaData parse(String configFile) {
         //TODO: change signature to get ParsingMethod.REGEX
@@ -39,6 +41,7 @@ public class ParserImpl implements CustomParser {
                 parser.addErrorListener(errorListener);
                 ConfigurationMetaData configMetaData = resolve(parser);
                 configMetaData.setParsingMethod(parsingMethod);
+                validator.validateTokenCount(configMetaData);
                 return configMetaData;
             } catch (IllegalArgumentException | FlexEngineParseException e) {
                 throw e;
@@ -50,6 +53,10 @@ public class ParserImpl implements CustomParser {
             logger.error("config file is null or empty");
             throw new IllegalArgumentException("config file is null or empty");
         }
+
+    }
+
+    private void validate(ConfigurationMetaData configMetaData) {
 
     }
 
