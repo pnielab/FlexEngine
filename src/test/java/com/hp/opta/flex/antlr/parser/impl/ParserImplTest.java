@@ -66,8 +66,8 @@ public class ParserImplTest {
 
     @Test(expected = FlexEngineParseException.class)
     public void testCheckNameIsWithIllegalCaracters() {
-        String input = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String input = "token.count=1\n" +
+                "regex=" + REGEX + '\n' +
                 "token[0].name=" + "name_31:11:00\n";
         ConfigurationMetaData configMetaData = parser.parse(input);
     }
@@ -86,8 +86,8 @@ public class ParserImplTest {
     @Test(expected = FlexEngineParseException.class)
     public void testCheckTypeIsTimeStampAndIncorrectFormatIsGiven() {
 
-        String configFile = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String configFile = "token.count=1\n"
+                + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.TimeStamp.name() + "\n" +
                 "token[0].format=" + "wrongformat\n";
@@ -96,8 +96,7 @@ public class ParserImplTest {
 
     @Test(expected = FlexEngineParseException.class)
     public void testCheckTypeIsTimeStampAndNoFormatIsGiven() {
-        String configFile = "regex=" + REGEX + '\n' +
-                "token.count=1\n" +
+        String configFile = "token.count=1\n" + "regex=" + REGEX + '\n' +
                 "token[0].name=" + NAME + "\n" +
                 "token[0].type=" + TokenType.TimeStamp.name() + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
@@ -116,12 +115,26 @@ public class ParserImplTest {
 
     @Test(expected = FlexEngineParseException.class)
     public void testCheckTypeIsIllegal() {
-        String configFile = "regex=" + REGEX + '\n' +
+        String configFile =
                 "token.count=1\n" +
-                "token[0].name=" + NAME + "\n" +
-                "token[0].type=" + "IllegalFormat" + '\n';
+                        "regex=" + REGEX + '\n' +
+                        "token[0].name=" + NAME + "\n" +
+                        "token[0].type=" + "IllegalFormat" + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
     }
+
+
+/*    @Test
+    public void testSpaceAfterTokens() {
+        String format = getSupportedFormat();
+        String configFile = "token.count=1" + " " + "\n" +
+                "regex=" + REGEX + " " + "\n" +
+                "token[0].name=" + NAME + " " + "\n" +
+                "token[0].type=" + TokenType.String.name() + " " + "\n" +
+                "token[0].format=" + "Format" + " " + "\n";
+
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
+    }*/
 
 
     @Test
