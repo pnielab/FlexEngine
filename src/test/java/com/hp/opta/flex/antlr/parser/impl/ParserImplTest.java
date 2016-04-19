@@ -194,7 +194,7 @@ public class ParserImplTest {
 
 
     private String getSupportedFormat() {
-        Map<String, String> dateFormats = (Map<String, String>) ReflectionTestUtils.getField(new MetaDataFactory(), "dateFormats");
+        Map<String, String> dateFormats = (Map<String, String>) ReflectionTestUtils.getField(ValidatorImpl.getInstance(), "dateFormats");
         Assert.assertNotNull(dateFormats);
         Collection<String> values = dateFormats.values();
         Assert.assertTrue(values.size() > 0);
