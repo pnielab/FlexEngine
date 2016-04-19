@@ -65,7 +65,10 @@ public class Main {
             parser.parseArgument(args);
             
             System.out.println("Reading Configuration");
-            ConfigurationMetaData metaData = new ParserImpl().parse(conf);
+            
+            String allData = readAllLines(conf);
+            
+            ConfigurationMetaData metaData = new ParserImpl().parse(allData);
             EventParsingData data = EventParsingDataHolder.publish("main", metaData);
             ParsingExcecutioner.publish("main", data);
 
@@ -107,6 +110,16 @@ public class Main {
     private String readInputLine(String input) throws IOException{
     	List<String> lines = Files.readAllLines(Paths.get(input));
     	return lines.get(0);
+    }
+    
+    
+    private String readAllLines(String input) throws IOException{
+    	
+    	StringBuilder strBuilder = new StringBuilder();
+    	
+    	Files.readAllLines(Paths.get(input)).forEach((line) -> strBuilder.append(line).append("\n"));
+    	
+    	return strBuilder.toString();
     }
     
     

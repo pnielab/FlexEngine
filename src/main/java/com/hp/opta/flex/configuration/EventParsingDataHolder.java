@@ -23,7 +23,8 @@ public class EventParsingDataHolder {
 	public static EventParsingData publish(String sourceType, ConfigurationMetaData metaData){
 		EventParsingData eventParsingData = new EventParsingData(metaData);
 		eventParsingData.initialize();
-		return configurations.put(sourceType, eventParsingData);
+		configurations.put(sourceType, eventParsingData);
+		return eventParsingData;
 	}
 	
 	
