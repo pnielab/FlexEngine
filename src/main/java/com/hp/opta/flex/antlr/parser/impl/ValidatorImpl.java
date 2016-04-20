@@ -3,7 +3,6 @@ package com.hp.opta.flex.antlr.parser.impl;
 import com.hp.opta.flex.antlr.exception.FlexEngineParseException;
 import com.hp.opta.flex.antlr.parser.Validator;
 import com.hp.opta.flex.configuration.model.ConfigurationMetaData;
-import com.hp.opta.flex.configuration.model.TokenMetaData;
 import com.hp.opta.flex.configuration.model.TokenType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +40,12 @@ public class ValidatorImpl implements Validator {
         return instance;
     }
 
+
     @Override
     public void validateTokenIndex(String name, String index1, String index2, String index3, ConfigurationMetaData configurationMetaData) {
         int currentTokenIndex = configurationMetaData.getNumberOfTokens() - 1;
         //validate same index for the same token
-        if (index2 != null && index3 != null && ((!index1.equals(index2)) || (!index2.equals(index3)) || (!index1.equals(index3)))) {
+        if (((index2 != null && (!index1.equals(index2))) || (index3 != null && (!index1.equals(index3))))) {
             logger.error("index do not match when trying to parse token with name: {}, index1: {}, index2: {}, index3: {}", name, index1, index2, index3);
             throw new FlexEngineParseException("index do not match when trying to parse token with name: " + name);
         }
@@ -71,8 +71,12 @@ public class ValidatorImpl implements Validator {
     }
 
     @Override
-    public boolean canAddToken(TokenMetaData tokenMetaData, ConfigurationMetaData configurationMetaData) {
-        return (configurationMetaData.getTokenCount() < configurationMetaData.getNumberOfTokens());
+    public boolean canAddToken(ConfigurationMetaData configurationMetaData) {
+        if (configurationMetaData.getTokenCount() <= configurationMetaData.getNumberOfTokens()) {
+            logger.error("unable to add token, to many tokens, number of tokens should be: {},", configurationMetaData.getTokenCount());
+            return false;
+        }
+        return true;
     }
 
     @Override
