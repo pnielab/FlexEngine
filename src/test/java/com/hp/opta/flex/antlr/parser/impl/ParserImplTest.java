@@ -243,10 +243,20 @@ public class ParserImplTest {
                 "token.count=1" + '\n' +
                 "token[0].name=" + NAME + '\n' +
                 "token[1].name=" + NAME + '\n' +
-                // index of name should be 2 instead of 1.
                 "token[2].name=" + NAME + '\n';
         ConfigurationMetaData configMetaData = parser.parse(configFile);
         Assert.assertTrue(configMetaData.getNumberOfTokens() == configMetaData.getTokenCount());
+    }
+
+
+    @Test(expected = FlexEngineParseException.class)
+    public void testNumberOfTokensAreLessThanTokenCountValidation() {
+        String configFile = "regex=" + REGEX + '\n' +
+                "token.count=10" + '\n' +
+                "token[0].name=" + NAME + '\n' +
+                "token[1].name=" + NAME + '\n' +
+                "token[2].name=" + NAME + '\n';
+        ConfigurationMetaData configMetaData = parser.parse(configFile);
     }
 
 
