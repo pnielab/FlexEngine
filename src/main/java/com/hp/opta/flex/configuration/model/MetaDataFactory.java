@@ -27,19 +27,24 @@ public class MetaDataFactory {
      * @param index1 the index1
      * @param index2 the index2
      * @param index3 the index3
-     * @return the token meta data
+     * @return the token meta data in token count validation error
      */
     public static TokenMetaData createTokenMetaData(String name, String type, String format, String index1, String index2, String index3, ConfigurationMetaData configurationMetaData) {
-        validator.validateTokenIndex(name, index1, index2, index3, configurationMetaData);
-        //default value of type is String
-        TokenType tokenType = (type == null) ? TokenType.String : TokenType.valueOf(type);
-        validator.validateFormat(tokenType, format);
-        return new TokenMetaData(name, tokenType, format, Integer.parseInt(index1));
+        if (validator.canAddToken(configurationMetaData)) {
+            validator.validateTokenIndex(name, index1, index2, index3, configurationMetaData);
+            //default value of type is String
+            TokenType tokenType = (type == null) ? TokenType.String : TokenType.valueOf(type);
+            validator.validateFormat(tokenType, format);
+            return new TokenMetaData(name, tokenType, format, Integer.parseInt(index1));
+        } else {
+            logger.error("unable to add token with name: {} and index: {}", name, index1);
+        }
+        return null;
     }
 
 
     public static void addTokenMetaData(TokenMetaData tokenMetaData, ConfigurationMetaData configurationMetaData) {
-        if (validator.canAddToken(tokenMetaData, configurationMetaData)) {
+        if (tokenMetaData != null) {
             configurationMetaData.addToken(tokenMetaData);
         }
     }

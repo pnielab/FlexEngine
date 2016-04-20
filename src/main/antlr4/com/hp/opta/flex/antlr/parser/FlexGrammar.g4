@@ -76,7 +76,9 @@ token returns [TokenMetaData tokenObj] :
 
 
 addAllTokens:
-  a=token {configMetaData.addToken($a.tokenObj); } ( b=token {configMetaData.addToken($b.tokenObj);})*
+  a=token {
+  MetaDataFactory.addTokenMetaData($a.tokenObj, configMetaData);
+  } ( b=token {MetaDataFactory.addTokenMetaData($b.tokenObj, configMetaData);})*
 ;
 
 /**

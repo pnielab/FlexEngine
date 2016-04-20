@@ -14,7 +14,7 @@ public interface Validator {
 
     void validateFormat(TokenType tokenType, String format);
 
-    boolean canAddToken(TokenMetaData tokenMetaData, ConfigurationMetaData configurationMetaData);
+    boolean canAddToken(ConfigurationMetaData configurationMetaData);
 
     void validateTokenCount(ConfigurationMetaData configMetaData);
 }
